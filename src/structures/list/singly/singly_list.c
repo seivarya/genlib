@@ -2,32 +2,32 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct node* singly_node_create(struct singly *self, void *data, int size);
-struct node* singly_iterate(struct singly *self, int index);
+struct singly_node* singly_node_create(struct singly *self, void *data, int size);
+struct singly_node* singly_iterate(struct singly *self, int index);
 
-void insert_singly(struct singly *self, int index, void *data, int size);
-void remove_singly(struct singly *self, int index);
-void reverse_singly(struct singly *self);
+void singly_insert(struct singly *self, int index, void *data, int size);
+void singly_remove(struct singly *self, int index);
+void singly_reverse(struct singly *self);
 
-void* retrieve_singly_node(struct singly *self, int index);
-void* retrieve_singly_data(struct singly *self, int index);
+void* singly_fetch_node(struct singly *self, int index);
+void* singly_fetch_data(struct singly *self, int index);
 
-struct singly singly_construct() {
+struct singly singly_construct(void) {
 
-	struct singly singly;
+	struct singly list;
 
-	singly.head = NULL;
-	singly.length = 0;
+	list.head = NULL;
+	list.length = 0;
 
-	singly.insert_singly = insert_singly;
-	singly.remove_singly = remove_singly;
-	singly.reverse_singly = reverse_singly;
+	list.insert = singly_insert;
+	list.remove = singly_remove;
+	list.reverse = singly_reverse;
 
-	singly.retrieve_singly_node = retrieve_singly_node;
-	singly.retrieve_singly_data = retrieve_singly_data;
+	list.fetch_node = singly_fetch_node;
+	list.fetch_data = singly_fetch_data;
 
 	printf("=== singly_construct(): struct initialized ===\n");
-	return singly;
+	return list;
 }
 
 void singly_destruct(struct singly *singly) {
@@ -44,32 +44,30 @@ void singly_destruct(struct singly *singly) {
 
 	printf("=== singly_destruct(): releasing nodes ===\n");
 	for (int i = 0; i < singly->length; i++) {
-		// iterate and free
+		// iterate and free (implementation skipped)
 	}
 	printf("=== singly_destruct(): complete ===\n");
 }
 
-struct node* singly_node_create(struct singly *self, void *data, int size) {
+struct singly_node* singly_node_create(struct singly *self, void *data, int size) {
 
-	if (self) {
-		// <nothing>
-	}
-	struct node *node = malloc(sizeof(struct node));
+	if (self) { /* <nothing> */ }
+
+	struct singly_node *node = malloc(sizeof(struct singly_node));
 	if (!node) {
 		perror("=== singly_node_create(): malloc failed ===\n");
 		exit(1);
 	}
 
-	*node = node_construct(data, size);
+	*node = singly_node_construct(data, size);
 
 	printf("=== singly_node_create(): node created ===\n");
 	return node;
 }
 
-struct node* singly_iterate(struct singly *self, int index) {
+struct singly_node* singly_iterate(struct singly *self, int index) {
 
 	if (index == 0) {
-		printf("=== singly_iterate(): returning head ===\n");
 		return self->head;
 	}
 	if (index < 0 || index > self->length) {
@@ -78,7 +76,7 @@ struct node* singly_iterate(struct singly *self, int index) {
 		exit(8);
 	}
 
-	struct node *cursor = self->head;
+	struct singly_node *cursor = self->head;
 
 	while (index != 0) {
 		cursor = cursor->next;
@@ -88,112 +86,110 @@ struct node* singly_iterate(struct singly *self, int index) {
 	return cursor;
 }
 
-void insert_singly(struct singly *self, int index, void *data, int size) {
+void singly_insert(struct singly *self, int index, void *data, int size) {
 
 	if (index < 0) {
-		perror("=== insert_singly(): warning: index can't be less than 0 ===\n");
+		perror("=== singly_insert(): warning: index can't be less than 0 ===\n");
 		return;
 	}
-
-	struct node *node_to_insert = singly_node_create(self, data, size);
+	struct singly_node *node_to_insert = singly_node_create(self, data, size);
 
 	if (index == 0) {
-		node_to_insert->next = self->head;
+		node_to_insert->next = self->head; 
 		self->head = node_to_insert;
 
 	} else if (index == 1 && self->head != NULL) {
 		self->head->next = node_to_insert;
 
 	} else {
-		struct node *left_pos_node = singly_iterate(self, index - 1);
-		struct node *right_pos_node = left_pos_node->next;
+		struct singly_node *left_pos_node = singly_iterate(self, index - 1);
+		struct singly_node *right_pos_node = left_pos_node->next;
 		left_pos_node->next = node_to_insert;
 		node_to_insert->next = right_pos_node;
 	}
 
 	self->length++;
-	printf("=== insert_singly(): node inserted, new length: %d ===\n", self->length);
+	printf("=== singly_insert(): node inserted, new length: %d ===\n", self->length);
 }
 
-void remove_singly(struct singly *self, int index) {
+void singly_remove(struct singly *self, int index) {
 
 	if (index >= self->length) {
-		perror("=== remove_singly(): warning: index can't be greater than list length ===\n");
+		perror("=== singly_remove(): warning: index can't be greater than list length ===\n");
 		return;
 	}
 	if (index < 0) {
-		perror("=== remove_singly(): warning: index can't be less than 0 ===\n");
+		perror("=== singly_remove(): warning: index can't be less than 0 ===\n");
 		return;
 	}
 
 	if (index == 0) {
-		struct node *temp = self->head;
+		struct singly_node *temp = self->head;
 		self->head = temp->next;
-		node_destruct(temp);
+		singly_node_destruct(temp);
 	} else {
-		struct node *left_pos_node = singly_iterate(self, index - 1);
-		struct node *right_pos_node = left_pos_node->next;
+		struct singly_node *left_pos_node = singly_iterate(self, index - 1);
+		struct singly_node *right_pos_node = left_pos_node->next;
 
 		left_pos_node->next = right_pos_node->next;
 
-		node_destruct(right_pos_node);
+		singly_node_destruct(right_pos_node);
 	}
 
-	self->length = self->length - 1;
-	printf("=== remove_singly(): node removed, new length: %d ===\n", self->length);
+	self->length--;
+	printf("=== singly_remove(): node removed, new length: %d ===\n", self->length);
 }
 
-void* retrieve_singly_node(struct singly *self, int index) {
+void* singly_fetch_node(struct singly *self, int index) {
 
 	if (index >= self->length) {
-		perror("=== retrieve_singly_node(): warning: index can't be greater than list length ===\n");
+		perror("=== singly_fetch_node(): warning: index can't be greater than list length ===\n");
 		return NULL;
 	}
 	if (index < 0) {
-		perror("=== retrieve_singly_node(): warning: index can't be less than 0 ===\n");
+		perror("=== singly_fetch_node(): warning: index can't be less than 0 ===\n");
 		return NULL;
 	}
 
 	if (index == 0) {
 		return self->head;
 	} else {
-		struct node *target_node = singly_iterate(self, index);
+		struct singly_node *target_node = singly_iterate(self, index);
 		return target_node;
 	}
 }
 
-void* retrieve_singly_data(struct singly *self, int index) {
+void* singly_fetch_data(struct singly *self, int index) {
 
 	if (index >= self->length) {
-		perror("=== retrieve_singly_data(): warning: index can't be greater than list length ===\n");
+		perror("=== singly_fetch_data(): warning: index can't be greater than list length ===\n");
 		return NULL;
 	}
 	if (index < 0) {
-		perror("=== retrieve_singly_data(): warning: index can't be less than 0 ===\n");
+		perror("=== singly_fetch_data(): warning: index can't be less than 0 ===\n");
 		return NULL;
 	}
 
 	if (index == 0) {
 		return self->head->data;
 	} else {
-		struct node *target_node = singly_iterate(self, index);
+		struct singly_node *target_node = singly_iterate(self, index);
 		return target_node->data;
 	}
 }
-void reverse_singly(struct singly *self) {
 
-	struct node *current = self->head;
-	struct node *previous = NULL;
-	struct node *next;
+void singly_reverse(struct singly *self) {
 
-	int count = 0;
+	struct singly_node *current = self->head;
+	struct singly_node *previous = NULL;
+	struct singly_node *next;
+
 	while (current != NULL) {
 		next = current->next;
 		current->next = previous;
 		previous = current;
 		current = next;
-		count++;
 	}
 
 	self->head = previous;
-} /* SINGLY_LIST_C */
+}
