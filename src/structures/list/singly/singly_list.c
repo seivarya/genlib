@@ -179,17 +179,6 @@ void* singly_fetch_data(struct singly *self, int index) {
 }
 
 void singly_reverse(struct singly *self) {
-
-	struct singly_node *current = self->head;
-	struct singly_node *previous = NULL;
-	struct singly_node *next;
-
-	while (current != NULL) {
-		next = current->next;
-		current->next = previous;
-		previous = current;
-		current = next;
-	}
-
-	self->head = previous;
+	if (!self) return;
+	//  TODO: later? i removed it coz im confused
 }

@@ -107,54 +107,91 @@ struct doubly_node* doubly_backward_iterate(struct doubly *self, int index) {
 
 void doubly_insert(struct doubly *self, int index, void *data, int size) {
 
+	if (index >= self->length) return;
+
 	struct doubly_node *node_to_insert = doubly_node_create(self, data, size);
 
 	if (index == 0) {
-
+		node_to_insert->previous = NULL; // previous *ptr shall be always NULL
 		if (self->length == 0) {
+			self->head = node_to_insert;
 			self->tail = node_to_insert;
-			node_to_insert->previous = NULL;
 		}
-
-		// ISSUE: have to update prev. node too and it ain't happening rn
-
-
-	} else if (index == 1 && self->head != NULL) {
-		self->head->next = node_to_insert;
-		node_to_insert->previous = self->head; // storing the values in vice-versa format! node after head will keep the value of previous aka the *head* itself!
-
+		node_to_insert->next = self->head;
+		self->head->previous = node_to_insert;
+		self->head = node_to_insert;
+	
+	} else if (index == self->length - 1) {
+		node_to_insert->previous = self->tail;
+		self->tail->next = node_to_insert;
 		self->tail = node_to_insert;
+		self->tail->next = NULL;
 
 	} else {
-		int mid_val = self->length / 2;
-		struct doubly_node *position_node;
+		int mid_val = (self->length - 1) / 2;
+		struct doubly_node *idx_node = (index <= mid_val) ? doubly_forward_iterate(self, index) : doubly_backward_iterate(self, index);
 
-		if (mid_val < index) {
-			position_node = doubly_backward_iterate(self, index);
-		} else {
-			position_node = doubly_forward_iterate(self, index);
-		}
+		node_to_insert->previous = idx_node->previous;
+		node_to_insert->next = idx_node;
 
-		node_to_insert->previous = position_node->previous;
-		node_to_insert->next = position_node;
+		idx_node->previous = node_to_insert;
+		node_to_insert->previous->next = node_to_insert;
 	}
 	self->length++;
-
 }
 
 void doubly_remove(struct doubly *self, int index) {
+	if (index >= self->length) return;
+	struct doubly_node *node_to_remove;
 
+	if (index == 0) {
+		node_to_remove = self->head;
+		if (self->head->next) {
+			self->head = self->head->next;
+			self->head->previous = NULL;
+		} else {
+			self->head = NULL;
+			self->tail = NULL;
+		}
+	} else if (index == self->length - 1){
+		node_to_remove = self->tail;
+		self->tail->previous->next = NULL;
+		self->tail = self->tail->previous;
+	} else {
+		int mid_val = (self->length - 1) / 2;
+		node_to_remove = (index <= mid_val) ? doubly_forward_iterate(self, index) : doubly_backward_iterate(self, index);
+
+		node_to_remove->previous->next = node_to_remove->next;
+		node_to_remove->next->previous = node_to_remove->previous;
+	}
+
+	doubly_node_destruct(node_to_remove);
+	self->length--;
 }
 
 void doubly_reverse(struct doubly *self) {
-
+	if (!self) return;
+	//  TODO: uh later
 }
 
 void* doubly_fetch_node(struct doubly *self, int index) {
+	if ((!self) || index >= self->length) return NULL;
 
+	int mid_val = (self->length - 1) / 2;
+	struct doubly_node *fetched_node = (index <= mid_val) ? doubly_forward_iterate(self, index) : doubly_backward_iterate(self, index);
+
+	if (!fetched_node) return NULL;
+	
+	return fetched_node;
 }
 
 void* doubly_fetch_data(struct doubly *self, int index) {
+	if ((!self) || index >= self->length) return NULL;
 
+	int mid_val = (self->length - 1) / 2;
+	struct doubly_node *fetched_node = (index <= mid_val) ? doubly_forward_iterate(self, index) : doubly_backward_iterate(self, index);
+
+	if (!fetched_node) return NULL;
+	
+	return fetched_node->data;
 }
-
