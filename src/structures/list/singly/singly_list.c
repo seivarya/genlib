@@ -31,7 +31,8 @@ struct singly singly_construct(void) {
 }
 
 void singly_destruct(struct singly *singly) {
-
+	//  BUG: not sure if it works
+	
 	if (!singly) {
 		perror("=== singly_destruct(): warning: list doesn't exist ===\n");
 		return;
@@ -42,16 +43,23 @@ void singly_destruct(struct singly *singly) {
 		return;
 	}
 
-	printf("=== singly_destruct(): releasing nodes ===\n");
-	for (int i = 0; i < singly->length; i++) {
-		// iterate and free (implementation skipped)
+	if (singly->length == 1) {
+		free(singly->head);
+	} else {
+
+		printf("=== singly_destruct(): releasing nodes ===\n");
+		struct singly_node *cursor = singly->head;
+		while(cursor != NULL) {
+			free(cursor->next);
+		}
+		free(cursor);
 	}
 	printf("=== singly_destruct(): complete ===\n");
 }
 
 struct singly_node* singly_node_create(struct singly *self, void *data, int size) {
 
-	if (self) { /* <nothing> */ }
+	if (!self) return NULL;
 
 	struct singly_node *node = malloc(sizeof(struct singly_node));
 	if (!node) {
@@ -180,5 +188,18 @@ void* singly_fetch_data(struct singly *self, int index) {
 
 void singly_reverse(struct singly *self) {
 	if (!self) return;
-	//  TODO: later? i removed it coz im confused
+
+	struct singly_node *current = self->head;
+
+	struct singly_node *previous = NULL;
+	struct singly_node *next = NULL;
+
+	while(current != NULL) {
+		next = current->next;
+		current->next = previous;
+		
+		previous = current;
+		current = next;
+	}
+	self->head = previous;
 }

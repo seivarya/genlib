@@ -12,8 +12,8 @@ singly_test := tests/singly_test.c
 obj_files = singly_node.o doubly_node.o singly_list.o doubly_list.o singly_test.o 
 flags = -Wall -Wextra -Iinclude
 
-exec_: $(obj_files)
-	gcc $(obj_files) -o exec_
+exe: $(obj_files)
+	gcc $(obj_files) -o exe
 
 singly_node.o: $(singly_node)
 	gcc $(flags) -c $(singly_node) -o singly_node.o
@@ -34,4 +34,4 @@ singly_test.o: $(singly_test)
 # 	gcc $(flags) -c $(doubly_test) -o doubly_test.o
 
 clean: 
-	rm -f $(obj_files) exec_
+	rm -f $(obj_files) exe

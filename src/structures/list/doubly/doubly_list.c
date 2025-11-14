@@ -54,7 +54,7 @@ void doubly_destruct(struct doubly *doubly) {
 
 }
 struct doubly_node* doubly_node_create(struct doubly *self, void *data, int size) {
-	if (self) { /* <nothing> */ }
+	if (!self) return NULL; 
 	struct doubly_node *node = malloc(sizeof(struct doubly_node));
 
 	if (!node) {
@@ -170,8 +170,21 @@ void doubly_remove(struct doubly *self, int index) {
 }
 
 void doubly_reverse(struct doubly *self) {
-	if (!self) return;
-	//  TODO: uh later
+	if (!self || self->length == 1) return;
+
+	struct doubly_node *current = self->head;
+	struct doubly_node *temp = NULL;
+
+	self->tail = self->head;
+
+	while(current != NULL) {
+		temp = current->previous;
+		current->previous = current->next;
+		current->next = temp;
+
+		current = current->previous;
+	}
+	if (temp != NULL) self->head = temp->previous;
 }
 
 void* doubly_fetch_node(struct doubly *self, int index) {
