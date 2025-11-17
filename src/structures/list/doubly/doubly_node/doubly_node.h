@@ -1,6 +1,10 @@
 #ifndef DOUBLY_NODE_H
 #define DOUBLY_NODE_H
 
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 struct doubly_node {
 	void *data;
 	struct doubly_node *next;

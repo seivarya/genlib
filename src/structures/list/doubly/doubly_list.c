@@ -1,18 +1,15 @@
 #include "doubly_list.h"
 
-#include <stdio.h>
-#include <stdlib.h>
+struct doubly_node* doubly_node_create(struct doubly *self, void *data, size_t size);
+struct doubly_node* doubly_forward_iterate(struct doubly *self, size_t index);
+struct doubly_node* doubly_backward_iterate(struct doubly *self, size_t index);
 
-struct doubly_node* doubly_node_create(struct doubly *self, void *data, int size);
-struct doubly_node* doubly_forward_iterate(struct doubly *self, int index);
-struct doubly_node* doubly_backward_iterate(struct doubly *self, int index);
-
-void doubly_insert(struct doubly *self, int index, void *data, int size);
-void doubly_remove(struct doubly *self, int index);
+void doubly_insert(struct doubly *self, size_t index, void *data, size_t size);
+void doubly_remove(struct doubly *self, size_t index);
 void doubly_reverse(struct doubly *self);
 
-void* doubly_fetch_node(struct doubly *self, int index);
-void* doubly_fetch_data(struct doubly *self, int index);
+void* doubly_fetch_node(struct doubly *self, size_t index);
+void* doubly_fetch_data(struct doubly *self, size_t index);
 
 
 struct doubly doubly_construct() {
@@ -36,83 +33,69 @@ struct doubly doubly_construct() {
 
 
 void doubly_destruct(struct doubly *doubly) {
-	if (!doubly) {
-		perror("=== doubly_destruct(): warning: list doesn't exist ===\n");
-		return;
-	}
-
-	if (doubly->head == NULL) {
-		perror("=== doubly_destruct(): warning: head is set to NULL ===\n");
-		return;
-	}
+	if (!dll_validate_list(doubly)) return;
+	if (!dll_validate_list_head(doubly)) return;
 
 	printf("=== doubly_destruct(): releasing nodes ===\n");
-	for (int i = 0; i < doubly->length; i++) {
+	for (size_t i = 0; i < doubly->length; i++) {
 		// iterate and free (implementation skipped)
 	}
 	printf("=== doubly_destruct(): complete ===\n");
-
 }
-struct doubly_node* doubly_node_create(struct doubly *self, void *data, int size) {
-	if (!self) return NULL; 
+
+struct doubly_node* doubly_node_create(struct doubly *self, void *data, size_t size) {
+
+	if (!dll_validate_list(self)) return NULL;
+
 	struct doubly_node *node = malloc(sizeof(struct doubly_node));
 
 	if (!node) {
 		perror("=== doubly_node_create(): malloc failed ===\n");
 		exit(1);
 	}
+
 	*node = doubly_node_contruct(data, size);
 	printf("=== doubly_node_create(): node created ===\n");
 
 	return node;
 }
 
-struct doubly_node* doubly_forward_iterate(struct doubly *self, int index) {
-	if (index == 0) {
-		return self->head;
-	}
-	if (index < 0 || index > self->length) {
-		printf("%d\n", index);
-		perror("=== doubly_iterate(): invalid index ===\n");
-		exit(8);
-	}
+struct doubly_node* doubly_forward_iterate(struct doubly *self, size_t index) {
+	if (!dll_validate_index(self, index)) return NULL;
+
+	if (index == 0) return self->head;
+
 	struct doubly_node *cursor = self->head;
 
 	while(index != 0) {
 		cursor = cursor->next;
 		index--;
 	}
-
 	return cursor;
 }
 
-struct doubly_node* doubly_backward_iterate(struct doubly *self, int index) {
-	if (index == 0) {
-		return self->head;
-	}
-	if (index < 0 || index > self->length) {
-		printf("%d\n", index);
-		perror("=== doubly_iterate(): invalid index ===\n");
-		exit(8);
-	}
+struct doubly_node* doubly_backward_iterate(struct doubly *self, size_t index) {
+	if (!dll_validate_index(self, index)) return NULL;
+
+	if (index == 0) return self->head;
+	
 	struct doubly_node *cursor = self->tail;
 
 	while(index != 0) {
-		cursor = cursor->previous; // goes in reverse!
+		cursor = cursor->previous; //  BUG:  there is a critical bug here!
 		index--;
 	}
-
 	return cursor;
 }
 
-void doubly_insert(struct doubly *self, int index, void *data, int size) {
-
-	if (index >= self->length) return;
+void doubly_insert(struct doubly *self, size_t index, void *data, size_t size) {
+	
+	if(!dll_validate_list(self)) return;
 
 	struct doubly_node *node_to_insert = doubly_node_create(self, data, size);
 
 	if (index == 0) {
-		node_to_insert->previous = NULL; // previous *ptr shall be always NULL
+		node_to_insert->previous = NULL;
 		if (self->length == 0) {
 			self->head = node_to_insert;
 			self->tail = node_to_insert;
@@ -140,8 +123,9 @@ void doubly_insert(struct doubly *self, int index, void *data, int size) {
 	self->length++;
 }
 
-void doubly_remove(struct doubly *self, int index) {
-	if (index >= self->length) return;
+void doubly_remove(struct doubly *self, size_t index) {
+	if (!dll_validate_list(self) || !dll_validate_index(self, index)) return;
+
 	struct doubly_node *node_to_remove;
 
 	if (index == 0) {
@@ -170,7 +154,8 @@ void doubly_remove(struct doubly *self, int index) {
 }
 
 void doubly_reverse(struct doubly *self) {
-	if (!self || self->length == 1) return;
+
+	if (!dll_validate_list(self)) return;
 
 	struct doubly_node *current = self->head;
 	struct doubly_node *temp = NULL;
@@ -187,8 +172,9 @@ void doubly_reverse(struct doubly *self) {
 	if (temp != NULL) self->head = temp->previous;
 }
 
-void* doubly_fetch_node(struct doubly *self, int index) {
-	if ((!self) || index >= self->length) return NULL;
+void* doubly_fetch_node(struct doubly *self, size_t index) {
+
+	if (!dll_validate_list(self) || !dll_validate_index(self, index)) return NULL;
 
 	int mid_val = (self->length - 1) / 2;
 	struct doubly_node *fetched_node = (index <= mid_val) ? doubly_forward_iterate(self, index) : doubly_backward_iterate(self, index);
@@ -198,8 +184,8 @@ void* doubly_fetch_node(struct doubly *self, int index) {
 	return fetched_node;
 }
 
-void* doubly_fetch_data(struct doubly *self, int index) {
-	if ((!self) || index >= self->length) return NULL;
+void* doubly_fetch_data(struct doubly *self, size_t index) {
+	if (!dll_validate_list(self) || !dll_validate_index(self, index)) return NULL;
 
 	int mid_val = (self->length - 1) / 2;
 	struct doubly_node *fetched_node = (index <= mid_val) ? doubly_forward_iterate(self, index) : doubly_backward_iterate(self, index);
@@ -207,4 +193,4 @@ void* doubly_fetch_data(struct doubly *self, int index) {
 	if (!fetched_node) return NULL;
 	
 	return fetched_node->data;
-}
+} /* DOUBLY_LIST_C */

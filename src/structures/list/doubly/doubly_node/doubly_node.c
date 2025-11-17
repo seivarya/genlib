@@ -1,16 +1,9 @@
 #include "doubly_node.h"
 
-#include <stdio.h>
-#include <string.h>
-#include <stdlib.h>
-
-
 struct doubly_node doubly_node_contruct(void *data, int size) {
+
 	printf("=== doubly_node_construct(): invoked ===\n");
 
-	if (size < 1) {
-		perror("=== doubly_node_construct(): size < 1 ===\n");
-	}
 	struct doubly_node node;
 
 	node.data = malloc(size);

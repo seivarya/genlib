@@ -1,15 +1,6 @@
 #include "singly_node.h"
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
 
-struct singly_node singly_node_construct(void *data, int size) {
-
-	printf("=== singly_node_construct(): invoked ===\n");
-
-	if (size < 1) {
-		perror("=== singly_node_construct(): size < 1 ===\n");
-	}
+struct singly_node singly_node_construct(void *data, size_t size) {
 
 	struct singly_node node;
 
@@ -29,4 +20,4 @@ void singly_node_destruct(struct singly_node *singly_node) {
 	free(singly_node);
 
 	printf("=== singly_node_destruct(): node destroyed successfully ===\n");
-}
+} /* SINGLY_NODE_C */

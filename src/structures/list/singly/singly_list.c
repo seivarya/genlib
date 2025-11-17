@@ -2,15 +2,15 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-struct singly_node* singly_node_create(struct singly *self, void *data, int size);
-struct singly_node* singly_iterate(struct singly *self, int index);
+struct singly_node* singly_node_create(struct singly *self, void *data, size_t size);
+struct singly_node* singly_iterate(struct singly *self, size_t index);
 
-void singly_insert(struct singly *self, int index, void *data, int size);
-void singly_remove(struct singly *self, int index);
+void singly_insert(struct singly *self, size_t index, void *data, size_t size);
+void singly_remove(struct singly *self, size_t index);
 void singly_reverse(struct singly *self);
 
-void* singly_fetch_node(struct singly *self, int index);
-void* singly_fetch_data(struct singly *self, int index);
+void* singly_fetch_node(struct singly *self, size_t index);
+void* singly_fetch_data(struct singly *self, size_t index);
 
 struct singly singly_construct(void) {
 
@@ -31,17 +31,9 @@ struct singly singly_construct(void) {
 }
 
 void singly_destruct(struct singly *singly) {
-	//  BUG: not sure if it works
 	
-	if (!singly) {
-		perror("=== singly_destruct(): warning: list doesn't exist ===\n");
-		return;
-	}
-
-	if (singly->head == NULL) {
-		perror("=== singly_destruct(): warning: head is set to NULL ===\n");
-		return;
-	}
+	if (!sll_validate_list(singly)) return;
+	if (!sll_validate_list_head(singly)) return;
 
 	if (singly->length == 1) {
 		free(singly->head);
@@ -57,9 +49,9 @@ void singly_destruct(struct singly *singly) {
 	printf("=== singly_destruct(): complete ===\n");
 }
 
-struct singly_node* singly_node_create(struct singly *self, void *data, int size) {
+struct singly_node* singly_node_create(struct singly *self, void *data, size_t size) {
 
-	if (!self) return NULL;
+	if(!sll_validate_list(self)) return NULL;
 
 	struct singly_node *node = malloc(sizeof(struct singly_node));
 	if (!node) {
@@ -73,15 +65,12 @@ struct singly_node* singly_node_create(struct singly *self, void *data, int size
 	return node;
 }
 
-struct singly_node* singly_iterate(struct singly *self, int index) {
+struct singly_node* singly_iterate(struct singly *self, size_t index) {
+
+	if (!sll_validate_index(self, index)) exit(0);
 
 	if (index == 0) {
 		return self->head;
-	}
-	if (index < 0 || index > self->length) {
-		printf("%d\n", index);
-		perror("=== singly_iterate(): invalid index ===\n");
-		exit(8);
 	}
 
 	struct singly_node *cursor = self->head;
@@ -90,16 +79,15 @@ struct singly_node* singly_iterate(struct singly *self, int index) {
 		cursor = cursor->next;
 		index--;
 	}
-
 	return cursor;
 }
 
-void singly_insert(struct singly *self, int index, void *data, int size) {
+//  info: struct methods
 
-	if (index < 0) {
-		perror("=== singly_insert(): warning: index can't be less than 0 ===\n");
-		return;
-	}
+void singly_insert(struct singly *self, size_t index, void *data, size_t size) {
+	
+	if (!sll_validate_index(self, index)) return;
+
 	struct singly_node *node_to_insert = singly_node_create(self, data, size);
 
 	if (index == 0) {
@@ -117,19 +105,11 @@ void singly_insert(struct singly *self, int index, void *data, int size) {
 	}
 
 	self->length++;
-	printf("=== singly_insert(): node inserted, new length: %d ===\n", self->length);
 }
 
-void singly_remove(struct singly *self, int index) {
-
-	if (index >= self->length) {
-		perror("=== singly_remove(): warning: index can't be greater than list length ===\n");
-		return;
-	}
-	if (index < 0) {
-		perror("=== singly_remove(): warning: index can't be less than 0 ===\n");
-		return;
-	}
+void singly_remove(struct singly *self, size_t index) {
+	
+	if (!sll_validate_index(self, index)) return;
 
 	if (index == 0) {
 		struct singly_node *temp = self->head;
@@ -145,19 +125,12 @@ void singly_remove(struct singly *self, int index) {
 	}
 
 	self->length--;
-	printf("=== singly_remove(): node removed, new length: %d ===\n", self->length);
+
 }
 
-void* singly_fetch_node(struct singly *self, int index) {
+void* singly_fetch_node(struct singly *self, size_t index) {
 
-	if (index >= self->length) {
-		perror("=== singly_fetch_node(): warning: index can't be greater than list length ===\n");
-		return NULL;
-	}
-	if (index < 0) {
-		perror("=== singly_fetch_node(): warning: index can't be less than 0 ===\n");
-		return NULL;
-	}
+	if (!sll_validate_index(self, index)) return NULL;
 
 	if (index == 0) {
 		return self->head;
@@ -167,16 +140,9 @@ void* singly_fetch_node(struct singly *self, int index) {
 	}
 }
 
-void* singly_fetch_data(struct singly *self, int index) {
+void* singly_fetch_data(struct singly *self, size_t index) {
 
-	if (index >= self->length) {
-		perror("=== singly_fetch_data(): warning: index can't be greater than list length ===\n");
-		return NULL;
-	}
-	if (index < 0) {
-		perror("=== singly_fetch_data(): warning: index can't be less than 0 ===\n");
-		return NULL;
-	}
+	if (!sll_validate_index(self, index)) return NULL;
 
 	if (index == 0) {
 		return self->head->data;
@@ -187,10 +153,10 @@ void* singly_fetch_data(struct singly *self, int index) {
 }
 
 void singly_reverse(struct singly *self) {
-	if (!self) return;
+
+	if (!sll_validate_list(self)) return;
 
 	struct singly_node *current = self->head;
-
 	struct singly_node *previous = NULL;
 	struct singly_node *next = NULL;
 
@@ -202,4 +168,4 @@ void singly_reverse(struct singly *self) {
 		current = next;
 	}
 	self->head = previous;
-}
+} /* SINGLY_LIST_C */
