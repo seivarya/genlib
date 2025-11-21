@@ -1,9 +1,6 @@
 #include <stdio.h>
 
 #include "../src/structures/list/singly/singly_list.h"
-#include "../src/structures/list/doubly/doubly_list.h"
-#include "../src/structures/list/circular/circular_list.h"
-
 
 int main(void) {
 	struct singly singly_list = singly_construct();

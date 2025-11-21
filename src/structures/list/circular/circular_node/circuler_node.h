@@ -6,7 +6,12 @@
 #include <string.h>
 
 struct circular_node {
-
+	void *data;
+	struct circular_node *next;
+	struct circular_node *previous; 
 };
+
+struct circular_node circular_node_construct(void *data, size_t size);
+void circular_node_destruct(struct circular_node *circular_node);
 
 #endif

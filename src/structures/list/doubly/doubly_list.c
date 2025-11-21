@@ -54,45 +54,50 @@ struct doubly_node* doubly_node_create(struct doubly *self, void *data, size_t s
 		exit(1);
 	}
 
-	*node = doubly_node_contruct(data, size);
-	printf("=== doubly_node_create(): node created ===\n");
-
+	*node = doubly_node_construct(data, size);
 	return node;
 }
 
-struct doubly_node* doubly_forward_iterate(struct doubly *self, size_t index) {
-	if (!dll_validate_index(self, index)) return NULL;
 
+// TODO: maybe implement one method for calculating iteration direction based off on index instead of relying on other method's <if> <else>??
+
+
+struct doubly_node *doubly_iterate(struct doubly *self, size_t index) {
 	if (index == 0) return self->head;
+	if (index == self->length - 1) return self->tail;
 
-	struct doubly_node *cursor = self->head;
-
+// FIX: fix this iterate shi-
+	struct doubly_node *cursor;
+	cursor = self->head;
 	while(index != 0) {
 		cursor = cursor->next;
 		index--;
+
+		// if (self->length / 2 >= index) { // forward iter
+		// 	cursor = self->head;
+		// 	while(index != 0) {
+		// 		cursor = cursor->next;
+		// 		index--;
+		// 	}
+		// } else {
+		// 	cursor = self->tail;
+		// 	while(index != 0) {
+		// 		cursor = cursor->previous;
+		// 		index--;
+		// 	}
+		// }
 	}
 	return cursor;
 }
 
-struct doubly_node* doubly_backward_iterate(struct doubly *self, size_t index) {
-	if (!dll_validate_index(self, index)) return NULL;
-
-	if (index == 0) return self->head;
-	
-	struct doubly_node *cursor = self->tail;
-
-	while(index != 0) {
-		cursor = cursor->previous; //  BUG:  there is a critical bug here!
-		index--;
-	}
-	return cursor;
-}
 
 void doubly_insert(struct doubly *self, size_t index, void *data, size_t size) {
 	
 	if(!dll_validate_list(self)) return;
+	if (!dll_validate_index(self, index)) return;
 
 	struct doubly_node *node_to_insert = doubly_node_create(self, data, size);
+
 
 	if (index == 0) {
 		node_to_insert->previous = NULL;
@@ -103,21 +108,20 @@ void doubly_insert(struct doubly *self, size_t index, void *data, size_t size) {
 		node_to_insert->next = self->head;
 		self->head->previous = node_to_insert;
 		self->head = node_to_insert;
-	
-	} else if (index == self->length - 1) {
+
+	} else if (self->length == index) { // tail
+		
 		node_to_insert->previous = self->tail;
 		self->tail->next = node_to_insert;
+		node_to_insert->next = NULL;
+
 		self->tail = node_to_insert;
-		self->tail->next = NULL;
-
 	} else {
-		int mid_val = (self->length - 1) / 2;
-		struct doubly_node *idx_node = (index <= mid_val) ? doubly_forward_iterate(self, index) : doubly_backward_iterate(self, index);
+		struct doubly_node *on_index_node =  doubly_iterate(self, index);
+		node_to_insert->previous = on_index_node->previous;
+		node_to_insert->next = on_index_node;
 
-		node_to_insert->previous = idx_node->previous;
-		node_to_insert->next = idx_node;
-
-		idx_node->previous = node_to_insert;
+		on_index_node->previous = node_to_insert;
 		node_to_insert->previous->next = node_to_insert;
 	}
 	self->length++;
@@ -142,14 +146,11 @@ void doubly_remove(struct doubly *self, size_t index) {
 		self->tail->previous->next = NULL;
 		self->tail = self->tail->previous;
 	} else {
-		int mid_val = (self->length - 1) / 2;
-		node_to_remove = (index <= mid_val) ? doubly_forward_iterate(self, index) : doubly_backward_iterate(self, index);
-
+		node_to_remove = doubly_iterate(self, index);
 		node_to_remove->previous->next = node_to_remove->next;
 		node_to_remove->next->previous = node_to_remove->previous;
 	}
 
-	doubly_node_destruct(node_to_remove);
 	self->length--;
 }
 
@@ -176,8 +177,7 @@ void* doubly_fetch_node(struct doubly *self, size_t index) {
 
 	if (!dll_validate_list(self) || !dll_validate_index(self, index)) return NULL;
 
-	int mid_val = (self->length - 1) / 2;
-	struct doubly_node *fetched_node = (index <= mid_val) ? doubly_forward_iterate(self, index) : doubly_backward_iterate(self, index);
+	struct doubly_node *fetched_node = doubly_iterate(self, index);
 
 	if (!fetched_node) return NULL;
 	
@@ -187,8 +187,7 @@ void* doubly_fetch_node(struct doubly *self, size_t index) {
 void* doubly_fetch_data(struct doubly *self, size_t index) {
 	if (!dll_validate_list(self) || !dll_validate_index(self, index)) return NULL;
 
-	int mid_val = (self->length - 1) / 2;
-	struct doubly_node *fetched_node = (index <= mid_val) ? doubly_forward_iterate(self, index) : doubly_backward_iterate(self, index);
+	struct doubly_node *fetched_node = doubly_iterate(self, index);
 
 	if (!fetched_node) return NULL;
 	

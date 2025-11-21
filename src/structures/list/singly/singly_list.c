@@ -98,10 +98,10 @@ void singly_insert(struct singly *self, size_t index, void *data, size_t size) {
 		self->head->next = node_to_insert;
 
 	} else {
-		struct singly_node *left_pos_node = singly_iterate(self, index - 1);
-		struct singly_node *right_pos_node = left_pos_node->next;
-		left_pos_node->next = node_to_insert;
-		node_to_insert->next = right_pos_node;
+		struct singly_node *left_index_node = singly_iterate(self, index - 1);
+		struct singly_node *right_index_node = left_index_node->next;
+		left_index_node->next = node_to_insert;
+		node_to_insert->next = right_index_node;
 	}
 
 	self->length++;
@@ -116,16 +116,15 @@ void singly_remove(struct singly *self, size_t index) {
 		self->head = temp->next;
 		singly_node_destruct(temp);
 	} else {
-		struct singly_node *left_pos_node = singly_iterate(self, index - 1);
-		struct singly_node *right_pos_node = left_pos_node->next;
+		struct singly_node *left_index_node = singly_iterate(self, index - 1);
+		struct singly_node *right_index_node = left_index_node->next;
 
-		left_pos_node->next = right_pos_node->next;
+		left_index_node->next = right_index_node->next;
 
-		singly_node_destruct(right_pos_node);
+		singly_node_destruct(right_index_node);
 	}
 
 	self->length--;
-
 }
 
 void* singly_fetch_node(struct singly *self, size_t index) {

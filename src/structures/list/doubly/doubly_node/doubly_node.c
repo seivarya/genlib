@@ -1,8 +1,6 @@
 #include "doubly_node.h"
 
-struct doubly_node doubly_node_contruct(void *data, int size) {
-
-	printf("=== doubly_node_construct(): invoked ===\n");
+struct doubly_node doubly_node_construct(void *data, int size) {
 
 	struct doubly_node node;
 
