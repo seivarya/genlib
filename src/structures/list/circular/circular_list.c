@@ -11,7 +11,6 @@ void* circular_fetch_node(struct circular *self, size_t index);
 void* circular_fetch_data(struct circular *self, size_t index);
 
 
-
 struct circular circular_construct(void) {
 
 	printf("=== circular_construct(): invoked === \n");
@@ -39,9 +38,6 @@ void circular_destruct(struct circular *circular) {
 	if (!cll_validate_list(circular)) return;
 	if (!cll_validate_list_head(circular)) return;
 
-	for (size_t i = 0; i < circular->length; i++) {
-		//  TODO: later uh
-	}
 }
 
 struct circular_node* circular_node_create(struct circular *self, void *data, size_t size) {
@@ -66,8 +62,6 @@ struct circular_node* circular_iterate(struct circular *self, size_t index) {
 	struct circular_node *cursor;
 	cursor = self->head;
 
-	// TODO: uh later
-	
 	while(index != 0) {
 		cursor = cursor->next;
 		index--;
@@ -76,8 +70,8 @@ struct circular_node* circular_iterate(struct circular *self, size_t index) {
 }
 
 void circular_insert(struct circular *self, size_t index, void *data, size_t size) {
+	if (index > self->length) return;
 	if (!cll_validate_list(self)) return;
-	if (!cll_validate_index(self, index)) return;
 
 	struct circular_node *node_to_insert;
 	node_to_insert = circular_node_create(self, data, size);

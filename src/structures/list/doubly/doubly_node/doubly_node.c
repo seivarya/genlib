@@ -1,29 +1,25 @@
 #include "doubly_node.h"
 
-struct doubly_node doubly_node_construct(void *data, int size) {
+struct doubly_node doubly_node_construct(void *data, size_t size) {
 
-	struct doubly_node node;
-
-	node.data = malloc(size);
+	struct doubly_node node = {
+		.data = malloc(size),
+		.next = NULL,
+		.previous = NULL
+	};
 	memcpy(node.data, data, size);
-	
-	node.next = NULL;
-	node.previous = NULL;
-
 	return node;
 }
 
 
 void doubly_node_destruct(struct doubly_node *doubly_node) {
+	if (!doubly_node) return;
+	if (doubly_node == NULL) return;
 	
-	printf("=== doubly_node_destruct(): invoked ===\n");
+	if (doubly_node->data) {
+		free(doubly_node->data);
+		doubly_node->data = NULL;
+	}
 
-	//  WARNING: uh maybe check for *existence of pointers first to avoid segfault..
-	
-	free(doubly_node->data);
-	free(doubly_node->next);
-	free(doubly_node->previous);
-
-
-	printf("=== doubly_node_destruct(): node destroyed successfully ===\n");
+	free(doubly_node);
 }

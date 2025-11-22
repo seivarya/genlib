@@ -1,23 +1,28 @@
+/* SINGLY_NODE_C */
+#ifndef SINGLY_NODE_C
+#define SINGLY_NODE_C
+
 #include "singly_node.h"
 
 struct singly_node singly_node_construct(void *data, size_t size) {
 
-	struct singly_node node;
-
-	node.data = malloc(size);
+	struct singly_node node = {
+		.data = malloc(size),
+		.next = NULL
+	};
 	memcpy(node.data, data, size);
-
-	node.next = NULL;
-
 	return node;
 }
 
 void singly_node_destruct(struct singly_node *singly_node) {
+	if (!singly_node) return;
+	if (singly_node == NULL) return;
 
-	printf("=== singly_node_destruct(): invoked ===\n");
+	if (singly_node->data) {
+		free(singly_node->data);
+		singly_node->data = NULL;
+	}
 
-	free(singly_node->data);
 	free(singly_node);
-
-	printf("=== singly_node_destruct(): node destroyed successfully ===\n");
-} /* SINGLY_NODE_C */
+} 
+#endif

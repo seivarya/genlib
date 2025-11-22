@@ -29,7 +29,7 @@ static inline int cll_validate_list(struct circular *circular) {
 }
 
 static inline int cll_validate_index(struct circular *circular, size_t index) {
-	if (index > circular->length) {
+	if (index >= circular->length) {
 		fprintf(stderr, "[ERROR]: index out of bounds (got %zu, length %zu)\n",
 	  index, circular->length);
 		return 0;

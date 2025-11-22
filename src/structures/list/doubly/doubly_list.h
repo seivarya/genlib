@@ -16,12 +16,12 @@ struct doubly {
 	void* (*fetch_data)(struct doubly *self, size_t index);
 };
 
-struct doubly doubly_construct();
+struct doubly doubly_construct(void);
 void doubly_destruct(struct doubly *doubly);
 
 
 static inline int dll_validate_list(struct doubly *doubly) {
-	if (!doubly) {
+	if (!doubly || doubly == NULL) {
 		fprintf(stderr, "[ERROR]: list doesn't exist\n");
 		return 0;
 	}
@@ -29,7 +29,7 @@ static inline int dll_validate_list(struct doubly *doubly) {
 }
 
 static inline int dll_validate_index(struct doubly *doubly, size_t index) {
-	if (index > doubly->length) {
+	if (index >= doubly->length) {
 		fprintf(stderr, "[ERROR]: index out of bounds (got %zu, length %zu)\n",
 	  index, doubly->length);
 		return 0;
