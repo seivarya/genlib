@@ -11,7 +11,7 @@ void* doubly_fetch_node(struct doubly *self, size_t index);
 void* doubly_fetch_data(struct doubly *self, size_t index);
 
 struct doubly doubly_construct(void) {
-	struct doubly doubly = {
+	struct doubly list= {
 		.head = NULL,
 		.tail = NULL,
 		.length = 0,
@@ -21,7 +21,7 @@ struct doubly doubly_construct(void) {
 		.fetch_data = doubly_fetch_data,
 		.fetch_node = doubly_fetch_node
 	};
-	return doubly;
+	return list;
 }
 
 void doubly_destruct(struct doubly *doubly) {
@@ -71,9 +71,6 @@ void doubly_insert(struct doubly *self, size_t index, void *data, size_t size) {
 
 	struct doubly_node *node_to_insert = doubly_node_create(self, data, size);
 
-	node_to_insert->next = NULL;
-	node_to_insert->previous = NULL;
-
 	if (index == 0) {
 		if (self->length == 0) { 
 			self->head = node_to_insert;
@@ -90,13 +87,12 @@ void doubly_insert(struct doubly *self, size_t index, void *data, size_t size) {
 		node_to_insert->previous = self->tail;
 		self->tail->next = node_to_insert;
 		self->tail = node_to_insert;
-
 	} else {
 		struct doubly_node *on_index_node = doubly_iterate(self, index);
 
-		node_to_insert->next = on_index_node;
 		node_to_insert->previous = on_index_node->previous;
-
+		node_to_insert->next = on_index_node;
+		
 		on_index_node->previous->next = node_to_insert;
 		on_index_node->previous = node_to_insert;
 	}

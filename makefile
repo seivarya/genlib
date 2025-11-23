@@ -20,7 +20,6 @@ flags = -g3 -ggdb -O1 \
          -Winit-self -Wuninitialized -Wswitch-enum -Wredundant-decls \
          -Wpointer-arith -Wvla \
          -Werror \
-         \
          -fsanitize=address \
          -fsanitize=undefined \
          -fsanitize=leak \

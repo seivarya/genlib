@@ -15,20 +15,16 @@ struct circular circular_construct(void) {
 
 	printf("=== circular_construct(): invoked === \n");
 
-	struct circular list;
-
-	list.head = NULL;
-	list.tail = list.head; // tail shall always be head
-
-	list.length = 0;
-
-	list.insert = circular_insert;
-	list.remove = circular_remove;
-	list.reverse = circular_reverse;
-
-	list.fetch_node = circular_fetch_node;
-	list.fetch_data = circular_fetch_data;
-
+	struct circular list = {
+		.head = NULL,
+		.tail = NULL,            // tail shall always start equal to head
+		.length = 0,
+		.insert = circular_insert,
+		.remove = circular_remove,
+		.reverse = circular_reverse,
+		.fetch_node = circular_fetch_node,
+		.fetch_data = circular_fetch_data
+	};
 	return list;
 }
 
