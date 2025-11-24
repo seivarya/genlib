@@ -1,3 +1,7 @@
+// ====================
+// | > doubly_list.c |
+// ====================
+
 #include "doubly_list.h"
 
 struct doubly_node* doubly_node_create(struct doubly *self, void *data, size_t size);

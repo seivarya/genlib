@@ -1,3 +1,7 @@
+// =====================
+// | > circular_node.h |
+// =====================
+
 #ifndef CIRCULAR_NODE_H
 #define CIRCULAR_NODE_H
 

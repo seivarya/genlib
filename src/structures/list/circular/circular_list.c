@@ -1,3 +1,7 @@
+// =====================
+// | > circular_list.c |
+// =====================
+
 #include "circular_list.h"
 
 struct circular_node* circular_node_create(struct circular *self, void *data, size_t size);
@@ -33,6 +37,8 @@ void circular_destruct(struct circular *circular) {
 
 	if (!cll_validate_list(circular)) return;
 	if (!cll_validate_list_head(circular)) return;
+
+	// oh maybe i set the tail to NULL and then do the same iteration of list destructor
 
 }
 

@@ -1,6 +1,8 @@
+// ====================
+// | > singly_list.c |
+// ====================
+
 #include "singly_list.h"
-#include <stdio.h>
-#include <stdlib.h>
 
 struct singly_node* singly_node_create(struct singly *self, void *data, size_t size);
 struct singly_node* singly_iterate(struct singly *self, size_t index);

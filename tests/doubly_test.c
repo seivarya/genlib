@@ -1,156 +1,308 @@
+// =======================
+// | test: doubly_test.h |
+// =======================
+
+
 #include "../src/structures/list/doubly/doubly_list.h"
 #include <assert.h>
 #include <stdbool.h>
 
 void basic_test(void);
-void insert_test(void);
-void remove_test(void);
 
+void insert_default_test(void);
+void insert_epoints_test(void);
+void insert_mid_test(void);
+
+void remove_default_test(void);
+void remove_epoints_test(void);
+void remove_mid_test(void);
+
+void fetch_node_test(void);
+void fetch_data_test(void);
 
 int main(void) {
-	printf("=== [test]: doubly linked list > running tests ===\n\n");
 
 	basic_test();
-	insert_test();
+
+	insert_default_test();
+	insert_epoints_test();
+	insert_mid_test();
+
+	remove_default_test();
+	remove_epoints_test();
+	remove_mid_test();
+
+	fetch_node_test();
+	fetch_data_test();
 
 	return 0;
 }
 
 
 void basic_test(void) {
-	printf("=== basic_tests(): initializing doubly linked list ===\n");
-	printf("===========================================\n");
+	printf("=== basic_test(): initializing doubly linked list ===\n");
+
 	struct doubly dlist;
 	dlist = doubly_construct();
-
+	
 	assert(dlist.head == NULL);
 	assert(dlist.tail == NULL);
 	assert(dlist.length == 0);
-	printf("===========================================\n");
-}
 
+	int head_node_data = 69;
+	dlist.insert(&dlist, 0, &head_node_data, sizeof(head_node_data));
 
-void insert_test(void) {
-	struct doubly dlist;
-	dlist = doubly_construct();
- 
-	// sec 1 — insert into empty list
-	
-	printf("insert_test(): inserting into empty list\n");
-	printf("===========================================\n");
-
-	char *data = "this data resides in a *single* node <head node to be precise> of my linked list"; // info: head
-	dlist.insert(&dlist, 0, data, strlen(data) + 1);
-
-	assert(strcmp((char *)dlist.head->data, data) == 0);
-	assert(strcmp((char *)dlist.tail->data, data) == 0);
+	assert(*(int *)dlist.head->data == head_node_data);
+	assert(*(int *)dlist.tail->data == head_node_data);
 	assert(dlist.length == 1);
 
+	doubly_destruct(&dlist); 
+	printf("\n");
+}
 
-	// sec 2 — linear inserts at tail
-	
-	printf("insert_test(): inserting data linearly at tail\n");
-	printf("===========================================\n");
+void insert_default_test(void) {
+	printf("=== insert_default_test(): initializing variables ===\n");
 
-	float sec = 3.1414f;
-	dlist.insert(&dlist, 1, &sec, sizeof(sec));
+	struct doubly dlist;
+	dlist = doubly_construct();
+
+	unsigned int val_1 = 2323;
+	int val_2 = 98;
+	char *val_3 = "attack on titan";
+	struct val_4 {
+		char *data;
+		int random;
+	};
+	struct val_4 val_4 = {
+		.data = "this is just a simple structure for testing!",
+		.random = 69
+	};
+
+	printf("=== insert_default_test(): inserting data ===\n");
+
+	dlist.insert(&dlist, 0, &val_1, sizeof(val_1));
+	assert(dlist.length == 1);
+	dlist.insert(&dlist, 1, &val_2, sizeof(val_2));
 	assert(dlist.length == 2);
-
-	int thi = 69;
-	dlist.insert(&dlist, 2, &thi, sizeof(thi));
+	dlist.insert(&dlist, 2, val_3, strlen(val_3) + 1);
 	assert(dlist.length == 3);
-
-	double fou = 93844.03;
-	dlist.insert(&dlist, 3, &fou, sizeof(fou));
+	dlist.insert(&dlist, 3, &val_4, sizeof(val_4));
 	assert(dlist.length == 4);
 
-	bool fif = true;
-	dlist.insert(&dlist, 4, &fif, sizeof(fif));
-	assert(dlist.length == 5);
+	// forward iteration
+	assert(*(unsigned int *)dlist.head->data == val_1);
+	assert(*(int *)dlist.head->next->data == val_2);
+	assert(strcmp((char *)dlist.head->next->next->data, val_3) == 0);
 
-	char *six = "this data is located at sixth position: index 5 to be precise in the list"; // info: tail
-	dlist.insert(&dlist, 5, six, strlen(six) + 1);
-	assert(dlist.length == 6);
+	struct val_4 test = *(struct val_4 *)dlist.head->next->next->next->data;
+	assert(strcmp(test.data, val_4.data) == 0);
+	assert(test.random == val_4.random);
 
-	// sec 3 — forward iteration checks
-	
-	printf("insert_test(): iterating using next pointer\n");
-	printf("===========================================\n");
-
-	assert((int)(*(float *)dlist.head->next->data) == (int)sec);
-
-	assert(*(int *)dlist.head->next->next->data == thi);
-
-	assert((int)*(double *)dlist.head->next->next->next->data == (int)fou);
-
-	assert(*(bool *)dlist.head->next->next->next->next->data == fif);
-
-	assert(strcmp((char *)dlist.head->next->next->next->next->next->data, six) == 0);
-
-
-	// sec 4 — backward iteration checks
-
-	printf("insert_test(): iterating using previous pointer\n");
-	printf("===========================================\n");
-
-	assert(strcmp((char *)dlist.tail->data, six) == 0);
-	assert(*(bool*)dlist.tail->previous->data == fif);
-	assert((int)*(double *)dlist.tail->previous->previous->data == (int)fou);
-	assert(*(int *)dlist.tail->previous->previous->previous->data == thi);
-	assert((int)*(float *)dlist.tail->previous->previous->previous->previous->data == (int)sec);
-	assert(strcmp((char *)dlist.tail->previous->previous->previous->previous->previous->data, data) == 0);
-
-
-	// sec 5 - head modification  | tail modification
-	
-	printf("insert_test(): modifying head and tail\n");
-	printf("===========================================\n");
-
-	bool test_head = false;
-	int test_tail = 73;
-
-	dlist.insert(&dlist, 0, &test_head, sizeof(test_head));
-	assert(dlist.length == 7);
-	dlist.insert(&dlist, dlist.length, &test_tail, sizeof(test_tail)); // info: dlist.length works as last index
-	assert(dlist.length == 8);
-
-	assert(*(bool *)dlist.head->data == test_head);
-	assert(strcmp((char *)dlist.head->next->data, data) == 0); // previous head shifted right
-	assert(*(bool *)dlist.head->next->previous->data == test_head); // previous head is connected to new head
-
-	assert(*(int *)dlist.tail->data == test_tail);
-	assert(strcmp((char *)dlist.tail->previous->data, six) == 0); // previous tail shifted left
-	assert(*(int *)dlist.tail->previous->next->data == test_tail); // previous tail is connected to new tail
-
-
-	// sec 6 - inserting data in middle | index validations
-	
-	printf("insert_test(): inserting data in middle\n");
-	printf("===========================================\n");
-
-	int mid_data_one = 322;
-	// int mid_data_two = 12;
-	// char *mid_data_three = "this data was inserted at the middle ~";
-	// bool mid_data_fourth = true;
-
-	dlist.insert(&dlist, 2, &mid_data_one, sizeof(mid_data_one)); // inserting at index 2
-	assert(dlist.length == 9);
-
-
-	// WARNING: undefined behvavious here
-	assert(*(int *)dlist.head->next->next->data == mid_data_one); // the chain is valid after insertion
-	assert((int)*(float *)dlist.head->next->next->previous->data == (int)sec); // the new node connects to the previous node
-
-
-	// sec x — destructor
-
-	printf("insert_test(): calling destructor\n");
-	printf("===========================================\n");
+	// backward iteration
+	struct val_4 test_2 = *(struct val_4 *)dlist.tail->data;
+	assert(strcmp((char *)test_2.data, val_4.data) == 0);
+	assert(test_2.random == val_4.random);
+	assert(strcmp((char *)dlist.tail->previous->data, val_3) == 0);
+	assert(*(int *)dlist.tail->previous->previous->data == val_2);
+	assert(*(unsigned int *)dlist.tail->previous->previous->previous->data == val_1);
 
 	doubly_destruct(&dlist);
+	printf("=== insert_default_test(): success ===\n");
+	printf("\n");
+}
 
-	assert(dlist.head == NULL);
-	assert(dlist.tail == NULL);
-	assert(dlist.length == 0);
+void insert_epoints_test(void) {
+	printf("=== insert_epoints_test(): initializing variables ===\n");
+
+	struct doubly dlist;
+	dlist = doubly_construct();
+
+	int val_1 = 23;
+	char val_2 = 'Q';
+	char *val_3 = "huh:";
+	char val_4 = 'Z';
+
+	dlist.insert(&dlist, 0, &val_1, sizeof(val_1));
+	dlist.insert(&dlist, 1, &val_2, sizeof(val_2));
+	dlist.insert(&dlist, 2, val_3, strlen(val_3) + 1);
+	dlist.insert(&dlist, 3, &val_4, sizeof(val_4));
+
+	printf("=== insert_epoints_test(): inserting at head and tail ===\n");
+
+	int val_5 = 12;
+	dlist.insert(&dlist, 0, &val_5, sizeof(val_5));
+	assert(dlist.length == 5);
+
+	char val_6 = '*';
+	dlist.insert(&dlist, 5, &val_6, sizeof(val_6));
+	assert(dlist.length == 6);
+
+	assert(*(int *)dlist.head->data == val_5);
+	assert(*(int *)dlist.head->next->previous->data == val_5);
+
+	assert(*(char *)dlist.tail->data == val_6);
+	assert(*(char *)dlist.tail->previous->next->data == val_6);
+
+	doubly_destruct(&dlist);
+	printf("=== insert_epoints_test(): success ===\n");
+	printf("\n");
+}
+
+void insert_mid_test(void) {
+	printf("=== insert_mid_test(): initializing variables ===\n");
+
+	struct doubly dlist;
+	dlist = doubly_construct();
+
+	int val_1 = 90;
+	char val_2 = 'W';
+	char val_3 = 'Y';
+	char val_4 = 'Z';
+	char val_to_insert = 'X';
+
+	printf("=== insert_mid_test(): inserting at mid index ===\n");
+
+	dlist.insert(&dlist, 0, &val_1, sizeof(val_1));
+	dlist.insert(&dlist, 1, &val_2, sizeof(val_2));
+	dlist.insert(&dlist, 2, &val_3, sizeof(val_3));
+	dlist.insert(&dlist, 3, &val_4, sizeof(val_4));
+
+	assert(dlist.length == 4);
+
+	dlist.insert(&dlist, 2, &val_to_insert, sizeof(val_to_insert));
+	assert(dlist.length == 5);
+
+	assert(*(char *)dlist.head->next->next->data == val_to_insert);
+	assert(*(char *)dlist.head->next->next->next->previous->data == val_to_insert);
+	assert(*(char *)dlist.head->next->next->previous->next->data == val_to_insert);
+
+	doubly_destruct(&dlist);
+	printf("=== insert_mid_test(): success ===\n");
+	printf("\n");
+}
+
+void remove_default_test(void) {
+	printf("=== remove_default_test(): initializing variables ===\n");
+
+	struct doubly dlist;
+	dlist = doubly_construct();
+
+	unsigned int val_1 = 2323;
+	int val_2 = 98;
+	char *val_3 = "attack on titan";
+
+	struct val_4 {
+		char *data;
+		int random;
+	};
+	struct val_4 val_4 = {
+		.data = "this is just a simple structure for testing!",
+		.random = 69
+	};
+
+	printf("=== remove_default_test(): inserting data ===\n");
+
+	dlist.insert(&dlist, 0, &val_1, sizeof(val_1));
+	dlist.insert(&dlist, 1, &val_2, sizeof(val_2));
+	dlist.insert(&dlist, 2, val_3, strlen(val_3) + 1);
+	dlist.insert(&dlist, 3, &val_4, sizeof(val_4));
+
+	printf("=== remove_default_test(): removing a node ===\n");
+
+	dlist.remove(&dlist, 0);
+
+	assert(*(int *)dlist.head->data == val_2);
+	assert(strcmp((char *)dlist.head->next->data, val_3) == 0);
+
+	doubly_destruct(&dlist);
+	printf("=== remove_default_test(): success ===\n\n");
+}
+
+void remove_epoints_test(void) {
+	printf("=== remove_epoints_test(): initializing variables ===\n");
+
+	struct doubly dlist;
+	dlist = doubly_construct();
+
+	int val_1 = 23;
+	char val_2 = 'Q';
+	int val_3 = 23;
+	int val_4 = 123;
+	char *val_5 = "huh:";
+	char val_6 = 'Z';
+
+	dlist.insert(&dlist, 0, &val_1, sizeof(val_1));
+	dlist.insert(&dlist, 1, &val_2, sizeof(val_2));
+	dlist.insert(&dlist, 2, &val_3, sizeof(val_3));
+	dlist.insert(&dlist, 3, &val_4, sizeof(val_4));
+	dlist.insert(&dlist, 4, val_5, strlen(val_5) + 1);
+	dlist.insert(&dlist, 5, &val_6, sizeof(val_6));
+
+	printf("=== remove_epoints_test(): removing head and tail ===\n");
+	
+
+	dlist.remove(&dlist, 0);
+	dlist.remove(&dlist, 4);  // tail index after head removal
+
+	assert(*(char *)dlist.head->data == val_2);
+	assert(*(int *)dlist.head->next->data == val_3);
+	assert(*(char *)dlist.head->next->previous->data == val_2);
+
+	assert(strcmp((char *)dlist.tail->data, val_5) == 0);
+	assert(*(int *)dlist.tail->previous->data == val_4);
+	assert(strcmp((char *)dlist.tail->previous->next->data, val_5) == 0);
+
+	doubly_destruct(&dlist);
+	printf("=== remove_epoints_test(): success ===\n\n");
+}
+
+void remove_mid_test(void) {
+	printf("=== remove_mid_test(): initializing variables ===\n");
+	
+
+	struct doubly dlist;
+	dlist = doubly_construct();
+
+	int val_1 = 23;
+	char val_2 = 'Q';
+	int val_3 = 23;
+	int val_4 = 123;
+	char *val_5 = "huh:";
+	char val_6 = 'Z';
+
+	dlist.insert(&dlist, 0, &val_1, sizeof(val_1));
+	dlist.insert(&dlist, 1, &val_2, sizeof(val_2));
+	dlist.insert(&dlist, 2, &val_3, sizeof(val_3));
+	dlist.insert(&dlist, 3, &val_4, sizeof(val_4));
+	dlist.insert(&dlist, 4, val_5, strlen(val_5) + 1);
+	dlist.insert(&dlist, 5, &val_6, sizeof(val_6));
+
+	printf("=== remove_mid_test(): removing mid node ===\n");
+
+	dlist.remove(&dlist, 2);
+
+	assert(*(int *)dlist.head->next->next->data == val_4);
+	assert(*(int *)dlist.head->next->next->next->previous->data == val_4);
+	assert(*(int *)dlist.head->next->next->previous->next->data == val_4);
+
+	doubly_destruct(&dlist);
+	printf("=== remove_mid_test(): success ===\n\n");
+}
+
+void fetch_node_test(void) {
+printf("=== fetch_node_test(): initializing variables ===\n");
+
+	struct doubly dlist;
+	dlist = doubly_construct();
+
+	int arr[5] = { 1, 4, 5, 7, 8 };
+	dlist.insert(&dlist, 0, &arr, sizeof(arr));
+
+
+	doubly_destruct(&dlist);
+}
+
+void fetch_data_test(void) {
+	return;
 }
 

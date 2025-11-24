@@ -1,4 +1,7 @@
-/* SINGLY_NODE_C */
+// ====================
+// | > singly_node.c |
+// ====================
+
 #ifndef SINGLY_NODE_C
 #define SINGLY_NODE_C
 
