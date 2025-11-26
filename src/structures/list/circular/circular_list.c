@@ -85,47 +85,99 @@ void circular_insert(struct circular *self, size_t index, void *data, size_t siz
 
 	struct circular_node *node_to_insert;
 	node_to_insert = circular_node_create(self, data, size);
-
 	if (!node_to_insert) return;
+
 	if (index == 0) {
+
 		if (self->length == 0) {
 			self->head = node_to_insert;
 			self->tail = node_to_insert;
+
 			node_to_insert->next = node_to_insert;
 			node_to_insert->previous = node_to_insert;
+
 			self->length++;
 			return;
 		}
+
 		node_to_insert->next = self->head;
 		node_to_insert->previous = self->tail;
 		self->head->previous = node_to_insert;
 		self->tail->next = node_to_insert;
 
 		self->head = node_to_insert;
-	} else if (index == self->length) { // insertion at tail is required
+
+	} else if (index == self->length) {  // insertion at tail is required
+
 		node_to_insert->previous = self->tail;
 		self->tail->next = node_to_insert;
 		node_to_insert->next = self->head;
 		self->head->previous = node_to_insert;
+
+		self->tail = node_to_insert;
+
 	} else {
+		struct circular_node *on_index_node = circular_iterate(self, index);
 
+		node_to_insert->previous = on_index_node->previous;
+		node_to_insert->next = on_index_node;
 
+		on_index_node->previous->next = node_to_insert;
+		on_index_node->previous = node_to_insert;
 	}
+
 	self->length++;
 }
 
 void circular_remove(struct circular *self, size_t index) {
+	if(!cll_validate_list(self)) return;
+	if (!cll_validate_index(self, index)) return;
 
+	if (index == 0) {
+		if (self->length == 1)  {
+			self->head = NULL;
+			self->tail = NULL;
+			self->length = 0;
+			return;
+		}
+		self->head = self->head->next;
+		self->head->previous = self->tail;
+		self->tail->next = self->head;
+	} else if (index == self->length - 1) {
+		self->tail->previous->next = self->head;
+		self->head->previous = self->tail->previous;
+		self->tail = self->tail->previous;
+
+	} else {
+		struct circular_node *node_to_remove = circular_iterate(self, index);
+		node_to_remove->previous->next = node_to_remove->next;
+		node_to_remove->next->previous = node_to_remove->previous;
+	}
+	self->length--;
 }
 
 void circular_reverse(struct circular *self) {
+	if(!cll_validate_list(self)) return;
+	if (!cll_validate_list_head(self)) return;
+	if (self->length == 1) return;
 
+	// too stupid rn to do this.
 }
 
 void* circular_fetch_node(struct circular *self, size_t index) {
-	return NULL;
+	if (!cll_validate_list(self)) return NULL;
+	if (!cll_validate_index(self, index)) return NULL;
+
+	struct circular_node *fetched_node = circular_iterate(self, index);
+	if (!fetched_node) return NULL;
+	return fetched_node;
 }
 
-void* circular_fetch_data(struct circular *self, size_t index) {
-	return NULL;
+void* circular_fetch_data(struct circular *self, size_t index) {	
+	if (!cll_validate_list(self)) return NULL;
+	if (!cll_validate_index(self, index)) return NULL;
+
+	struct circular_node *fetched_node = circular_iterate(self, index);
+	if (!fetched_node) return NULL;
+	return fetched_node->data;
 }

@@ -35,9 +35,9 @@ int main(void) {
 	fetch_node_test();
 	fetch_data_test();
 
+	printf("=== all tests  passed ===\n");
 	return 0;
 }
-
 
 void basic_test(void) {
 	printf("=== basic_test(): initializing doubly linked list ===\n");
@@ -239,7 +239,7 @@ void remove_epoints_test(void) {
 	dlist.insert(&dlist, 5, &val_6, sizeof(val_6));
 
 	printf("=== remove_epoints_test(): removing head and tail ===\n");
-	
+
 
 	dlist.remove(&dlist, 0);
 	dlist.remove(&dlist, 4);  // tail index after head removal
@@ -258,7 +258,7 @@ void remove_epoints_test(void) {
 
 void remove_mid_test(void) {
 	printf("=== remove_mid_test(): initializing variables ===\n");
-	
+
 
 	struct doubly dlist;
 	dlist = doubly_construct();
@@ -290,19 +290,33 @@ void remove_mid_test(void) {
 }
 
 void fetch_node_test(void) {
-printf("=== fetch_node_test(): initializing variables ===\n");
+	printf("=== fetch_node_test(): initializing variables ===\n");
 
 	struct doubly dlist;
 	dlist = doubly_construct();
 
-	int arr[5] = { 1, 4, 5, 7, 8 };
-	dlist.insert(&dlist, 0, &arr, sizeof(arr));
+	int data = 45;
+	dlist.insert(&dlist, 0, &data, sizeof(data));
 
+	struct doubly_node *fetched_node = dlist.fetch_node(&dlist, 0);
+	assert(*(int *)fetched_node->data == data);
 
 	doubly_destruct(&dlist);
+	printf("=== fetch_node_test(): success ===\n");
 }
 
 void fetch_data_test(void) {
-	return;
-}
+	printf("=== fetch_data_test(): initializing variables ===\n");
 
+	struct doubly dlist;
+	dlist = doubly_construct();
+
+	int data = 45;
+	dlist.insert(&dlist, 0, &data, sizeof(data));
+
+	int fetched_data = *(int *)dlist.fetch_data(&dlist, 0);
+	assert(fetched_data == data);
+
+	doubly_destruct(&dlist);
+	printf("=== fetch_data_test(): success ===\n");
+}

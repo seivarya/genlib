@@ -110,6 +110,12 @@ void doubly_remove(struct doubly *self, size_t index) {
 	struct doubly_node *node_to_remove;
 
 	if (index == 0) {
+		if (self->length == 1) {
+			self->head = NULL;
+			self->tail = NULL;
+			self->length = 0;
+			return;
+		}
 		node_to_remove = self->head;
 
 		if (self->head->next) {
