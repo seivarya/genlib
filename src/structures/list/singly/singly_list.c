@@ -25,7 +25,6 @@ struct singly singly_construct(void) {
 		.fetch_data = singly_fetch_data 
 	};
 
-	printf("=== singly_construct(): struct initialized ===\n");
 	return list;
 }
 
@@ -65,8 +64,6 @@ struct singly_node* singly_node_create(struct singly *self, void *data, size_t s
 		exit(1);
 	}
 	*node = singly_node_construct(data, size);
-
-	printf("=== singly_node_create(): node created ===\n");
 	return node;
 }
 
@@ -129,7 +126,7 @@ void singly_remove(struct singly *self, size_t index) {
 
 void* singly_fetch_node(struct singly *self, size_t index) {
 
-	if (!sll_validate_index(self, index + 1)) return NULL;
+	if (!sll_validate_index(self, index)) return NULL;
 
 	if (index == 0) {
 		return self->head;
