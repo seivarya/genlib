@@ -26,4 +26,4 @@ void doubly_node_destruct(struct doubly_node *doubly_node) {
 	}
 
 	free(doubly_node);
-}
+} /* doubly_node_c */

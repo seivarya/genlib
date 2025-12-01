@@ -60,10 +60,18 @@ struct doubly_node* doubly_node_create(struct doubly *self, void *data, size_t s
 struct doubly_node* doubly_iterate(struct doubly *self, size_t index) {
 	if (index == 0) return self->head;
 	if (index == self->length - 1) return self->tail;
-
-	struct doubly_node *cursor = self->head;
-	while (index != 0) {
-		cursor = cursor->next;
+	size_t mid_idx = (self->length / 2) + 1;
+	if (index < mid_idx) {
+		struct doubly_node *cursor = self->head;
+		while (index != 0) {
+			cursor = cursor->next;
+			index--;
+		}
+		return cursor;
+	}
+	struct doubly_node *cursor = self->tail;
+	while(index != 0) {
+		cursor = cursor->previous;
 		index--;
 	}
 	return cursor;
@@ -177,4 +185,4 @@ void* doubly_fetch_data(struct doubly *self, size_t index) {
 	if (!fetched_node) return NULL;
 
 	return fetched_node->data;
-} /* DOUBLY_LIST_C */
+} /* doubly_list_c */

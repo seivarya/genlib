@@ -1,8 +1,0 @@
-[ ]: implement list structs
-	[x] : implement singly list
-	[x] : implement doubly list
-	[ ] : implement circular list
-
-
-[ ] : add try catch {} in structs
-[ ] : adv. tests maybe

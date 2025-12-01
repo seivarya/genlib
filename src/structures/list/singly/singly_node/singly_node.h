@@ -17,4 +17,4 @@ struct singly_node {
 struct singly_node singly_node_construct(void *data, size_t size);
 void singly_node_destruct(struct singly_node *singly_node);
 
-#endif /* SINGLY_NODE_H */
+#endif /* singly_node_h */

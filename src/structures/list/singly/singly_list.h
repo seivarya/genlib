@@ -50,4 +50,4 @@ static inline int sll_validate_list_head(struct singly *singly) {
     return 1;
 }
 
-#endif /* SINGLY_LIST_H */
+#endif /* singly_list_h */

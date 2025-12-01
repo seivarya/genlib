@@ -49,4 +49,4 @@ static inline int cll_validate_list_head(struct circular *circular) {
     return 1;
 }
 
-#endif
+#endif /* circular_list_h */

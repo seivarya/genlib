@@ -1,5 +1,5 @@
 // =======================
-// | test: singly_test.h |
+// | test: singly_test.c |
 // =======================
 
 #include <assert.h>
@@ -260,4 +260,4 @@ void fetch_data_test(void) {
 
 	singly_destruct(&slist);
 	printf("=== fetch_data_test(): success ===\n");
-}
+} /* singly_test_c */

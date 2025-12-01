@@ -164,4 +164,4 @@ void singly_reverse(struct singly *self) {
 		current = next;
 	}
 	self->head = previous;
-} /* SINGLY_LIST_C */
+} /* singly_list_c */

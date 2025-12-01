@@ -28,4 +28,4 @@ void singly_node_destruct(struct singly_node *singly_node) {
 
 	free(singly_node);
 } 
-#endif
+#endif /* singly_node_c */

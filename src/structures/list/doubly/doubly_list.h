@@ -49,4 +49,4 @@ static inline int dll_validate_list_head(struct doubly *doubly) {
     return 1;
 }
 
-#endif
+#endif /* doubly_list_h */

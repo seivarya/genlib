@@ -19,4 +19,4 @@ struct doubly_node {
 struct doubly_node doubly_node_construct(void *data, size_t size);
 void doubly_node_destruct(struct doubly_node *doubly_node);
 
-#endif
+#endif /* doubly_node_h */

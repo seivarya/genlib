@@ -1,5 +1,5 @@
 // =======================
-// | test: doubly_test.h |
+// | test: doubly_test.c |
 // =======================
 
 
@@ -319,4 +319,4 @@ void fetch_data_test(void) {
 
 	doubly_destruct(&dlist);
 	printf("=== fetch_data_test(): success ===\n");
-}
+} /* doubly_test_c */
