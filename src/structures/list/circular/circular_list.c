@@ -1,5 +1,5 @@
 // ===================================================================================
-// | > circular_list.c | note: circular_list is based on circular doubly linked list |
+// | > circular_list.c | note: circular_list is based on circular circular linked list |
 // ===================================================================================
 
 #include "circular_list.h"
@@ -38,6 +38,7 @@ void circular_destruct(struct circular *circular) {
 	if (!cll_validate_list(circular)) return;
 	if (!cll_validate_list_head(circular)) return;
 
+	circular->tail->next = NULL;
 	struct circular_node *current = circular->head;
 	struct circular_node *next = NULL;
 	while(current != NULL) {
@@ -45,6 +46,8 @@ void circular_destruct(struct circular *circular) {
 		circular_node_destruct(current);
 		current = next;
 	}
+	circular->head = NULL;
+	circular->length = 0;
 }
 
 struct circular_node* circular_node_create(struct circular *self, void *data, size_t size) {
@@ -64,11 +67,18 @@ struct circular_node* circular_iterate(struct circular *self, size_t index) {
 	if (index == 0) return self->head;
 	if (index == self->length - 1) return self->tail;
 
-	struct circular_node *cursor;
-	cursor = self->head;
-
+	size_t mid_idx = (self->length / 2) + 1;
+	if (index < mid_idx) {
+		struct circular_node *cursor = self->head;
+		while (index != 0) {
+			cursor = cursor->next;
+			index--;
+		}
+		return cursor;
+	}
+	struct circular_node *cursor = self->tail;
 	while(index != 0) {
-		cursor = cursor->next;
+		cursor = cursor->previous;
 		index--;
 	}
 	return cursor;
@@ -127,6 +137,7 @@ void circular_remove(struct circular *self, size_t index) {
 	if(!cll_validate_list(self)) return;
 	if (!cll_validate_index(self, index)) return;
 
+	struct circular_node *node_to_remove; // maybe this should be NULL??
 	if (index == 0) {
 		if (self->length == 1)  {
 			self->head = NULL;
@@ -134,19 +145,22 @@ void circular_remove(struct circular *self, size_t index) {
 			self->length = 0;
 			return;
 		}
-		self->head = self->head->next;
+		node_to_remove = self->head;
+		self->head = node_to_remove->next;
 		self->head->previous = self->tail;
 		self->tail->next = self->head;
 	} else if (index == self->length - 1) {
-		self->tail->previous->next = self->head;
-		self->head->previous = self->tail->previous;
-		self->tail = self->tail->previous;
-
+		node_to_remove = self->tail;
+		node_to_remove->previous->next = self->head;
+		self->head->previous = node_to_remove->previous;
+		self->tail = node_to_remove->previous;
 	} else {
-		struct circular_node *node_to_remove = circular_iterate(self, index);
+		node_to_remove = circular_iterate(self, index);
 		node_to_remove->previous->next = node_to_remove->next;
 		node_to_remove->next->previous = node_to_remove->previous;
 	}
+
+	circular_node_destruct(node_to_remove);
 	self->length--;
 }
 
