@@ -6,13 +6,13 @@
 
 struct doubly_node doubly_node_construct(void *data, size_t size) {
 
-	struct doubly_node node = {
+	struct doubly_node doubly_node = {
 		.data = malloc(size),
 		.next = NULL,
 		.previous = NULL
 	};
-	memcpy(node.data, data, size);
-	return node;
+	memcpy(doubly_node.data, data, size);
+	return doubly_node;
 }
 
 

@@ -1,14 +1,18 @@
+// ====================
+// | > stack_node.c |
+// ====================
+
 #include "stack_node.h"
 
-
 struct stack_node stack_node_construct(size_t size, void *data) {
-	struct stack_node node;
-	node.next = NULL;
+	struct stack_node stack_node = {
+		.data = malloc(size),
+		.next = NULL,
+	};
 
-	node.data = malloc(size);
-	memcpy(node.data, data, size);
+	memcpy(stack_node.data, data, size);
 
-	return node;
+	return stack_node;
 }
 void stack_node_destruct(struct stack_node *stack_node) {
 	if (!stack_node) return;

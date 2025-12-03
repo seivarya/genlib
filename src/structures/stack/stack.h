@@ -1,3 +1,7 @@
+// ====================
+// | > stack_node.h |
+// ====================
+
 #include "stack_node/stack_node.h"
 #include <stdbool.h>
 
@@ -16,10 +20,12 @@ void stack_destruct(struct stack *stack);
 
 static inline int stack_validate(struct  stack *stack) {
 	if (stack) return 1;
+	printf("=== stack_validate(): failed ===\n");
 	return 0;
 }
 
 static inline int stack_head_validate(struct stack *stack) {
 	if (stack->head) return 1;
+	printf("=== stack_head_validate(): failed ===\n");
 	return 0;
 } /* stack_h */

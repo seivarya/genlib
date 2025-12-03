@@ -6,15 +6,15 @@
 
 struct circular_node circular_node_construct(void *data, size_t size) {
 
-	struct circular_node node;
+	struct circular_node circular_node;
 	
-	node.data = malloc(size);
-	memcpy(node.data, data, size);
+	circular_node.data = malloc(size);
+	memcpy(circular_node.data, data, size);
 
-	node.next = NULL;
-	node.previous = NULL;
+	circular_node.next = NULL;
+	circular_node.previous = NULL;
 
-	return node;
+	return circular_node;
 }
 
 void circular_node_destruct(struct circular_node *circular_node) {

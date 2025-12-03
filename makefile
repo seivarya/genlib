@@ -19,29 +19,29 @@ circular_test_obj_files = circular_node.o circular_list.o circular_test.o
 stack_test_obj_files = stack_node.o stack.o stack_test.o
 
 flags = -g3 -ggdb -O1 \
-         -Wall -Wextra -Wpedantic -Wshadow -Wformat=2 -Wconversion \
-         -Wnull-dereference -Wdouble-promotion -Wimplicit-fallthrough \
-         -Wcast-align -Wstrict-aliasing=3 -Wstrict-prototypes -Wmissing-prototypes \
-         -Wmissing-declarations -Wunused-parameter -Wfloat-equal \
-         -Winit-self -Wuninitialized -Wswitch-enum -Wredundant-decls \
-         -Wpointer-arith -Wvla \
-         -Werror \
-         -fsanitize=address \
-         -fsanitize=undefined \
-         -fsanitize=leak \
-         -fsanitize=pointer-compare \
-         -fsanitize=pointer-subtract \
-         -fsanitize=alignment \
-         -fsanitize=bounds \
-         -fsanitize=float-cast-overflow \
-         -fsanitize=float-divide-by-zero \
-         -fsanitize=signed-integer-overflow \
-         -fno-omit-frame-pointer \
-         -fno-optimize-sibling-calls \
-         -fstack-protector-all \
-         -D_FORTIFY_SOURCE=2 \
-         -fPIC \
-         -std=c11 -msse -mfpmath=sse
+	-Wall -Wextra -Wpedantic -Wshadow -Wformat=2 -Wconversion \
+	-Wnull-dereference -Wdouble-promotion -Wimplicit-fallthrough \
+	-Wcast-align -Wstrict-aliasing=3 -Wstrict-prototypes -Wmissing-prototypes \
+	-Wmissing-declarations -Wunused-parameter -Wfloat-equal \
+	-Winit-self -Wuninitialized -Wswitch-enum -Wredundant-decls \
+	-Wpointer-arith -Wvla \
+	-Werror \
+	-fsanitize=address \
+	-fsanitize=undefined \
+	-fsanitize=leak \
+	-fsanitize=pointer-compare \
+	-fsanitize=pointer-subtract \
+	-fsanitize=alignment \
+	-fsanitize=bounds \
+	-fsanitize=float-cast-overflow \
+	-fsanitize=float-divide-by-zero \
+	-fsanitize=signed-integer-overflow \
+	-fno-omit-frame-pointer \
+	-fno-optimize-sibling-calls \
+	-fstack-protector-all \
+	-D_FORTIFY_SOURCE=2 \
+	-fPIC \
+	-std=c11 -msse -mfpmath=sse
 
 ldflags = -fsanitize=undefined,address,leak \
 	-lm \
@@ -49,7 +49,6 @@ ldflags = -fsanitize=undefined,address,leak \
 	-Wl,-z,now
 
 all: singly_test doubly_test circular_test stack_test
-
 #==========================================================#
 
 singly_test: $(singly_test_obj_files)
@@ -91,6 +90,7 @@ circular_list.o: $(circular_list)
 
 stack.o: $(stack)
 	gcc $(flags) -c $(stack) -o stack.o
+
 #==========================================================#
 
 singly_test.o: $(singly_test)
@@ -104,6 +104,8 @@ circular_test.o: $(circular_test)
 
 stack_test.o: $(stack_test)
 	gcc $(flags) -c $(stack_test) -o stack_test.o
+
+#==========================================================#
 #==========================================================#
 
 clean: 
@@ -111,3 +113,5 @@ clean:
 	rm -f $(doubly_test_obj_files) doubly_test 
 	rm -f $(circular_test_obj_files) circular_test
 	rm -f $(stack_test_obj_files) stack_test
+
+#==========================================================#

@@ -1,3 +1,7 @@
+// ====================
+// | > stack_node.c |
+// ====================
+
 #include "stack.h"
 
 struct stack_node* stack_node_create(struct stack *self, void *data, size_t size);
@@ -9,14 +13,15 @@ void* stack_peek(struct stack *self);
 
 
 struct stack stack_construct(void) {
-	struct stack stack;
-	stack.head = NULL;
-	stack.length = 0;
+	struct stack stack = {
+		.head = NULL,
+		.length = 0,
 
-	stack.push = stack_push;
-	stack.pop = stack_pop;
-	stack.is_empty = stack_is_empty;
-	stack.peek = stack_peek;
+		.push = stack_push,
+		.pop = stack_pop,
+		.is_empty = stack_is_empty,
+		.peek = stack_peek
+	};
 
 	return stack;
 }
@@ -25,7 +30,9 @@ void stack_destruct(struct stack *stack) {
 	if (!stack) return;
 	if (!stack->head || stack->head == NULL) return;
 	if (stack->length == 1) {
-		stack_node_destruct(stack->head);
+		stack_node_destruct(stack->head);	
+		stack->head = NULL;
+		stack->length = 0;
 		return;
 	}
 	struct stack_node *current = stack->head;
@@ -40,7 +47,7 @@ void stack_destruct(struct stack *stack) {
 }
 
 struct stack_node* stack_node_create(struct stack *self, void *data, size_t size) {
-	if (stack_validate(self)) return NULL;
+	if (!(self)) return NULL;
 	struct stack_node *node = malloc(sizeof(struct stack_node));
 	if (!node) {
 		perror("=== stack_node_create(): malloc failed ===\n");
@@ -55,6 +62,7 @@ void stack_push(struct stack *self, void *data, size_t size) {
 	struct stack_node *node_to_insert = stack_node_create(self, data, size);
 	if (self->length == 0) {
 		self->head = node_to_insert;
+		node_to_insert->next = NULL;
 		self->length++;
 		return;
 	}
@@ -65,14 +73,14 @@ void stack_push(struct stack *self, void *data, size_t size) {
 
 void stack_pop(struct stack *self) {
 	if (stack_validate(self) == 0) return;
-	if (self->length == 1) {
-		stack_node_destruct(self->head);
-		self->length--;
-		return;
-	}
+	if (self->length == 0) return;
 
 	struct stack_node *node_to_remove = self->head;
-	self->head = node_to_remove->next;
+	if (self->length == 1) {
+		self->head = NULL;
+	} else {
+		self->head = node_to_remove->next;
+	}
 	stack_node_destruct(node_to_remove);
 	self->length--;
 }
@@ -90,5 +98,5 @@ bool stack_is_empty(struct stack *self) {
 void* stack_peek(struct stack *self) {
 	if (stack_validate(self) == 0) return NULL;
 	if (stack_head_validate(self) == 0) return NULL;
-	return self->head;
+	return self->head->data;
 } /* stack_c */

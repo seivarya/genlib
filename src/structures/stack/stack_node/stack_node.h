@@ -1,3 +1,7 @@
+// ====================
+// | > stack_node.h |
+// ====================
+
 #ifndef STACK_NODE_H
 #define STACK_NODE_H
 
