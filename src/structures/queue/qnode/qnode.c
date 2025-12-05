@@ -2,7 +2,7 @@
 // | > queue_node.h |
 // ====================
 
-#include "queue_node.h"
+#include "qnode.h"
 
 struct queue_node queue_node_construct(void *data, size_t size) {
 	struct queue_node queue_node = {

@@ -2,7 +2,7 @@
 // |    > queue.h     |
 // ====================
 
-#include "queue_node/queue_node.h"
+#include "qnode/qnode.h"
 #include <stdbool.h>
 
 struct queue {
@@ -21,10 +21,14 @@ struct queue {
 struct queue queue_construct(void);
 void queue_destruct(struct queue *queue);
 
-static int queue_validate(struct queue *queue) {
+static inline int queue_validate(struct queue *queue) {
+	if (queue) return 1;
+	printf("=== queue_validate(): failed ===\n");
 	return 0;
 }
 
-static int queue_head_validate(struct queue *queue) {
+static inline int queue_head_validate(struct queue *queue) {
+	if (queue->head) return 1;
+	printf("=== queue_head_validate(): failed ===\n");
 	return 0;
 } /* queue_h */

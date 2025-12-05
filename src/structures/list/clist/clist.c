@@ -2,7 +2,7 @@
 // | > circular_list.c | note: circular_list is based on circular circular linked list |
 // ===================================================================================
 
-#include "circular_list.h"
+#include "clist.h"
 
 struct circular_node* circular_node_create(struct circular *self, void *data, size_t size);
 struct circular_node* circular_iterate(struct circular *self, size_t index);
@@ -53,7 +53,7 @@ void circular_destruct(struct circular *circular) {
 struct circular_node* circular_node_create(struct circular *self, void *data, size_t size) {
 	if (!cll_validate_list(self)) return NULL;
 
-	struct circular_node *node = malloc(sizeof(struct circular));
+	struct circular_node *node = malloc(sizeof(struct circular_node));
 
 	if (!node) {
 		perror("=== circular_node_create(): malloc failed ===\n");

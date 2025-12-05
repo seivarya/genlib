@@ -2,7 +2,7 @@
 // | > circular_node.c |
 // =====================
 
-#include "circuler_node.h"
+#include "cnode.h"
 
 struct circular_node circular_node_construct(void *data, size_t size) {
 

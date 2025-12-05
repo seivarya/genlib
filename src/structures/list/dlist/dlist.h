@@ -5,7 +5,7 @@
 #ifndef DOUBLY_LIST_H
 #define DOUBLY_LIST_H
 
-#include "doubly_node/doubly_node.h"
+#include "dnode/dnode.h"
 
 struct doubly {
 	struct doubly_node *head;

@@ -63,11 +63,10 @@ void stack_push(struct stack *self, void *data, size_t size) {
 	if (self->length == 0) {
 		self->head = node_to_insert;
 		node_to_insert->next = NULL;
-		self->length++;
-		return;
+	} else {
+		node_to_insert->next = self->head;
+		self->head = node_to_insert;
 	}
-	node_to_insert->next = self->head;
-	self->head = node_to_insert;
 	self->length++;
 }
 

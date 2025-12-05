@@ -2,7 +2,7 @@
 // | > stack_node.c |
 // ====================
 
-#include "stack_node.h"
+#include "snode.h"
 
 struct stack_node stack_node_construct(size_t size, void *data) {
 	struct stack_node stack_node = {

@@ -149,4 +149,4 @@ void peek_test(void) {
 
 	stack_destruct(&stack);
 	printf("=== peek_test(): success ===\n\n");
-}
+} /* stack_test_c */

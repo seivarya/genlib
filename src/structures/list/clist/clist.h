@@ -5,7 +5,7 @@
 #ifndef CIRCULAR_LIST_H
 #define CIRCULAR_LIST_H
 
-#include "circular_node/circuler_node.h"
+#include "cnode/cnode.h"
 
 struct circular {
 	struct circular_node *head;

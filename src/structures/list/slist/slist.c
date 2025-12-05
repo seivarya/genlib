@@ -2,7 +2,7 @@
 // | > singly_list.c |
 // ====================
 
-#include "singly_list.h"
+#include "slist.h"
 
 struct singly_node* singly_node_create(struct singly *self, void *data, size_t size);
 struct singly_node* singly_iterate(struct singly *self, size_t index);
@@ -29,28 +29,24 @@ struct singly singly_construct(void) {
 }
 
 void singly_destruct(struct singly *singly) {
-	
+
 	if (!sll_validate_list(singly)) return;
 	if (!sll_validate_list_head(singly)) return;
+	struct singly_node *current = singly->head;
+	struct singly_node *next;
 
 	if (singly->length == 1) {
 		singly_node_destruct(singly->head);
 	} else {
-		printf("=== singly_destruct(): releasing nodes ===\n");
-		struct singly_node *current = singly->head;
-		struct singly_node *next;
-
 		while(current != NULL) {
 			next = current->next;
 			singly_node_destruct(current);
 			current = next;
 		}
-
-		current = NULL;
-		next = NULL;
-		singly->head = NULL;
-		singly->length = 0;
 	}
+	singly->head = NULL;
+	singly->length = 0;
+
 	printf("=== singly_destruct(): complete ===\n");
 }
 

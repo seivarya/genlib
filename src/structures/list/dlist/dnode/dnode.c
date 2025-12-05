@@ -2,7 +2,7 @@
 // | > doubly_node.c |
 // ====================
 
-#include "doubly_node.h"
+#include "dnode.h"
 
 struct doubly_node doubly_node_construct(void *data, size_t size) {
 

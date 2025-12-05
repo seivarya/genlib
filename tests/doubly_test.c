@@ -3,7 +3,7 @@
 // =======================
 
 
-#include "../src/structures/list/doubly/doubly_list.h"
+#include "../src/structures/list/dlist/dlist.h"
 #include <assert.h>
 #include <stdbool.h>
 

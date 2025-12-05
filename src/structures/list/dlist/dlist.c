@@ -2,7 +2,7 @@
 // | > doubly_list.c |
 // ====================
 
-#include "doubly_list.h"
+#include "dlist.h"
 
 struct doubly_node* doubly_node_create(struct doubly *self, void *data, size_t size);
 struct doubly_node* doubly_iterate(struct doubly *self, size_t index);
@@ -34,13 +34,15 @@ void doubly_destruct(struct doubly *doubly) {
 
 	struct doubly_node *current = doubly->head;
 	struct doubly_node *next;
-
-	while (current != NULL) {
-		next = current->next;
-		doubly_node_destruct(current);
-		current = next;
+	if (doubly->length == 1) {
+		doubly_node_destruct(doubly->head);
+	} else {
+		while (current != NULL) {
+			next = current->next;
+			doubly_node_destruct(current);
+			current = next;
+		}
 	}
-
 	doubly->head = NULL;
 	doubly->tail = NULL;
 	doubly->length = 0;

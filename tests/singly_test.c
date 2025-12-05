@@ -3,7 +3,7 @@
 // =======================
 
 #include <assert.h>
-#include "../src/structures/list/singly/singly_list.h"
+#include "../src/structures/list/slist/slist.h"
 
 void basic_test(void);
 

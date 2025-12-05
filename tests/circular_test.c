@@ -4,7 +4,7 @@
 
 #include <assert.h>
 #include <stdbool.h>
-#include "../src/structures/list/circular/circular_list.h"
+#include "../src/structures/list/clist/clist.h"
 
 void basic_test(void);
 

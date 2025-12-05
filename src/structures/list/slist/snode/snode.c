@@ -5,7 +5,7 @@
 #ifndef SINGLY_NODE_C
 #define SINGLY_NODE_C
 
-#include "singly_node.h"
+#include "snode.h"
 
 struct singly_node singly_node_construct(void *data, size_t size) {
 

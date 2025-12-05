@@ -2,7 +2,7 @@
 // | > stack_node.h |
 // ====================
 
-#include "stack_node/stack_node.h"
+#include "snode/snode.h"
 #include <stdbool.h>
 
 struct stack {
