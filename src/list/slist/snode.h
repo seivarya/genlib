@@ -1,6 +1,4 @@
-// ====================
-// | > snode.h |
-// ====================
+/* snode.h: singly linked list node interface */
 
 #ifndef SNODE_H
 #define SNODE_H

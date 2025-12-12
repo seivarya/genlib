@@ -1,29 +1,40 @@
-// =====================
-// | > circular_node.c |
-// =====================
+/* cnode.c: circular linked list node methods */
+
+#include <stdio.h>
+#include <string.h>
 
 #include "cnode.h"
 
-struct circular_node circular_node_construct(void *data, size_t size) {
+cnode* cnode_construct(void *data, size_t size) {
+	cnode *node = malloc(sizeof(cnode));
+	if (!node) {
+		perror("=== malloc failed: cnode_construct(): sizeof(cnode) ===");
+		return NULL;
+	}
 
-	struct circular_node circular_node;
-	
-	circular_node.data = malloc(size);
-	memcpy(circular_node.data, data, size);
+	node->data = malloc(size);
+	if (!node->data) {
+		perror("=== malloc failed: cnode_construct(): node->data ===");
+		free(node);
+		return NULL;
+	}
 
-	circular_node.next = NULL;
-	circular_node.previous = NULL;
+	memcpy(node->data, data, size);
 
-	return circular_node;
+	node->next = NULL;
+	node->previous = NULL;
+
+	return node;
 }
 
-void circular_node_destruct(struct circular_node *circular_node) {
-	if (!circular_node) return;
-	if (circular_node == NULL) return;
-	
-	if (circular_node->data) {
-		free(circular_node->data);
-		circular_node->data = NULL;
+void cnode_destruct(cnode *node) {
+	if (!node)
+		return;
+
+	if (node->data) {
+		free(node->data);
+		node->data = NULL;
 	}
-	free(circular_node);
-} /* circular_node_c */
+
+	free(node);
+} /* cnode_c */

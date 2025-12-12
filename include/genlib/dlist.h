@@ -1,52 +1,23 @@
-// ====================
-// | > doubly_list.h |
-// ====================
+/* dlist.h: doubly linked list header file */
 
 #ifndef DLIST_H
 #define DLIST_H
 
 #include "../../src/list/dlist/dnode.h"
 
-struct doubly {
-	struct doubly_node *head;
-	struct doubly_node *tail;
+typedef struct dlist {
+	dnode *head;
+	dnode *tail;
 	size_t length;
-	
-	void (*insert)(struct doubly *self, size_t index, void *data, size_t size);
-	void (*remove)(struct doubly *self, size_t index);
-	void (*reverse)(struct doubly *self);
+} dlist;
 
-	void* (*fetch_node)(struct doubly *self, size_t index);
-	void* (*fetch_data)(struct doubly *self, size_t index);
-};
+dlist* dlist_construct(void);
+void dlist_destruct(dlist *list);
 
-struct doubly doubly_construct(void);
-void doubly_destruct(struct doubly *doubly);
+void dlist_insert(dlist *list, size_t index, void *data, size_t size);
+void dlist_remove(dlist *list, size_t index);
+void dlist_reverse(dlist *list);
 
-
-static inline int dll_validate_list(struct doubly *doubly) {
-	if (!doubly || doubly == NULL) {
-		fprintf(stderr, "[ERROR]: list doesn't exist\n");
-		return 0;
-	}
-	return 1;
-}
-
-static inline int dll_validate_index(struct doubly *doubly, size_t index) {
-	if (index >= doubly->length) {
-		fprintf(stderr, "[ERROR]: index out of bounds (got %zu, length %zu)\n",
-	  index, doubly->length);
-		return 0;
-	}
-	return 1;
-}
-
-static inline int dll_validate_list_head(struct doubly *doubly) {
-	if (!doubly->head) {
-		fprintf(stderr, "[ERROR]: head is NULL\n");
-		return 0;
-	}
-    return 1;
-}
+void* dlist_fetch_data(dlist *list, size_t index);
 
 #endif /* dlist_h */

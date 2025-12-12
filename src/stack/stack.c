@@ -1,101 +1,104 @@
-// ====================
-// | > stack_node.c |
-// ====================
+/* stack.c: stack methods */
 
-#include "stack.h"
+#include <stdlib.h>
+#include <stdio.h>
 
-struct stack_node* stack_node_create(struct stack *self, void *data, size_t size);
+#include "stnode.h"
+#include "../../include/genlib/stack.h"
 
-void stack_push(struct stack *self, void *data, size_t size);
-void stack_pop(struct stack *self);
-bool stack_is_empty(struct stack *self);
-void* stack_peek(struct stack *self);
+/* info: private methods */
 
-
-struct stack stack_construct(void) {
-	struct stack stack = {
-		.head = NULL,
-		.length = 0,
-
-		.push = stack_push,
-		.pop = stack_pop,
-		.is_empty = stack_is_empty,
-		.peek = stack_peek
-	};
-
-	return stack;
+static inline int _validate_stack(stack *stk) {
+	if (stk == NULL) {
+		fprintf(stderr, "=== error: _validate_stack(): stack doesn't exist or it has been destroyed ===\n");
+		return 0;
+	}
+	return 1;
 }
 
-void stack_destruct(struct stack *stack) {
-	if (!stack) return;
-	if (!stack->head || stack->head == NULL) return;
-	if (stack->length == 1) {
-		stack_node_destruct(stack->head);	
-		stack->head = NULL;
-		stack->length = 0;
-		return;
+static inline int _validate_stindex(stack *stk, size_t index) {
+	if (!stk || index >= stk->length) {
+		fprintf(stderr,
+	  "=== error: _validate_stindex(): index [%zu] out of bounds <length: %zu> ===\n",
+	  index, stk->length);
+		return 0;
 	}
-	struct stack_node *current = stack->head;
-	struct stack_node *next = NULL;
-	while(current != NULL) {
-		next = current->next;
-		stack_node_destruct(current);
+	return 1;
+}
+
+/* info: public methods */
+
+stack* stack_construct(void) {
+	stack *stk = malloc(sizeof(stack));
+	if (stk) {
+		stk->head = NULL;
+		stk->length = 0;
+		return stk;
+	}
+
+	fprintf(stderr, "=== error: stack_construct(): malloc failed ===\n");
+	return NULL;
+}
+
+void stack_destruct(stack *stk) {
+	if (!_validate_stack(stk))
+		return;
+
+	/* destroy all nodes */
+	stnode *current = stk->head;
+	while (current != NULL) {
+		stnode *next = current->next;
+		stnode_destruct(current);
 		current = next;
 	}
-	stack->head = NULL;
-	stack->length = 0;
-}
 
-struct stack_node* stack_node_create(struct stack *self, void *data, size_t size) {
-	if (!(self)) return NULL;
-	struct stack_node *node = malloc(sizeof(struct stack_node));
-	if (!node) {
-		perror("=== stack_node_create(): malloc failed ===\n");
-	}
-	*node = stack_node_construct(size, data);
-	return node;
-}
+	free(stk);
+} // do stacks even have reverse() method ???
 
-void stack_push(struct stack *self, void *data, size_t size) {
-	if (stack_validate(self) == 0) return;
+void push(stack *stk, void *data, size_t size) {
+	if (!_validate_stack(stk))
+		return;
 
-	struct stack_node *node_to_insert = stack_node_create(self, data, size);
-	if (self->length == 0) {
-		self->head = node_to_insert;
-		node_to_insert->next = NULL;
+	stnode *new_node = stnode_construct(data, size);
+
+	/* insert at head */
+	if (stk->length == 0) {
+		stk->head = new_node; /* new_node->next is already NULL */
 	} else {
-		node_to_insert->next = self->head;
-		self->head = node_to_insert;
+		new_node->next = stk->head;
+		stk->head = new_node;
 	}
-	self->length++;
+
+	stk->length++;
 }
 
-void stack_pop(struct stack *self) {
-	if (stack_validate(self) == 0) return;
-	if (self->length == 0) return;
+void pop(stack *stk) {
+	if (!_validate_stack(stk) || stk->length == 0)
+		return;
 
-	struct stack_node *node_to_remove = self->head;
-	if (self->length == 1) {
-		self->head = NULL;
+	stnode *target = stk->head;
+
+	/* update head */
+	if (stk->length == 1) {
+		stk->head = NULL;
 	} else {
-		self->head = node_to_remove->next;
+		stk->head = target->next;
 	}
-	stack_node_destruct(node_to_remove);
-	self->length--;
+
+	stnode_destruct(target);
+	stk->length--;
 }
 
-bool stack_is_empty(struct stack *self) {
-	if (stack_validate(self) == 0) return false;
-	if (stack_head_validate(self) == 0) return false;
+int is_empty(stack *stk) {
+	if (!_validate_stack(stk))
+		return 1;
 
-	if (self->length == 0) {
-		return true;
-	}
-	return false;
+	return stk->length == 0;
 }
 
-void* stack_peek(struct stack *self) {
-	if (stack_validate(self) == 0) return NULL;
-	if (stack_head_validate(self) == 0) return NULL;
-	return self->head->data;
+void* peek(stack *stk) {
+	if (!_validate_stack(stk) || stk->length == 0)
+		return NULL;
+
+	return stk->head->data;
 } /* stack_c */

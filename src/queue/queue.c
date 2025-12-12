@@ -1,103 +1,111 @@
-// ====================
-// |    > queue.c     |
-// ====================
+#include <stdlib.h>
+#include <stdio.h>
 
-#include "queue.h"
+#include "qnode.h"
+#include "../../include/genlib/queue.h"
 
-struct queue_node* queue_node_create(struct queue *self, void *data, size_t size);
+/* info: private methods */
 
-void queue_enqueue(struct queue *self, void *data, size_t size);
-void queue_dequeue(struct queue *self);
-bool queue_is_empty(struct queue *self);
-
-void* queue_get_front(struct queue *self);
-void* queue_get_rear(struct queue *self);
-
-struct queue queue_construct(void) {
-	struct queue queue = {
-		.head = NULL,
-		.tail = NULL,
-		.length = 0,
-		.enqueue = queue_enqueue,
-		.dequeue = queue_dequeue,
-		.is_empty = queue_is_empty,
-		.get_front = queue_get_front,
-		.get_rear = queue_get_rear
-	};
-	return queue;
+static inline int _validate_queue(queue *q) {
+	if (q == NULL) {
+		fprintf(stderr, "=== error: _validate_queue(): queue doesn't exist or it has been destroyed ===\n");
+		return 0;
+	}
+	return 1;
 }
 
-void queue_destruct(struct queue *queue) {
-	if (queue_validate(queue) == 0) return;
-
-	if (queue->length == 1) {
-		queue_node_destruct(queue->head);
-		queue->length = 0;
-		queue->head = NULL;
-		queue->tail = NULL;
-		return;
+static inline int _validate_qindex(queue *q, size_t index) {
+	if (!q || index >= q->length) {
+		fprintf(stderr,
+	  "=== error: _validate_qindex(): index [%zu] out of bounds <length: %zu> ===\n",
+	  index, q->length);
+		return 0;
 	}
-	struct queue_node *current = queue->head;
-	struct queue_node *next = NULL;
-	while(current != NULL) {
-		next = current->next;
-		queue_node_destruct(current);
+	return 1;
+}
+
+/* info: public methods */
+
+queue* queue_construct(void) {
+	queue *q = malloc(sizeof(queue));
+	if (q) {
+		q->head = NULL;
+		q->tail = NULL;
+		q->length = 0;
+		return q;
+	}
+
+	fprintf(stderr, "=== error: queue_construct(): malloc failed ===\n");
+	return NULL;
+}
+
+void queue_destruct(queue *q) {
+	if (!_validate_queue(q))
+		return;
+
+	/* destroy all nodes */
+	qnode *current = q->head;
+	while (current != NULL) {
+		qnode *next = current->next;
+		qnode_destruct(current);
 		current = next;
 	}
-	queue->head = NULL;
-	queue->length = 0;
-	queue->tail = NULL;
+
+	free(q);
 }
 
-struct queue_node * queue_node_create(struct queue *self, void *data, size_t size) {
-	if (queue_validate(self) == 0) return NULL;
-	struct queue_node *node = malloc(sizeof(struct queue_node));
-	if (!node) {
-		perror("=== queue_node_create(): malloc failed ===\n");
-	}
-	*node = queue_node_construct(data, size);
-	return node;
-}
+void enqueue(queue *q, void *data, size_t size) {
+	if (!_validate_queue(q))
+		return;
 
-void queue_enqueue(struct queue *self, void *data, size_t size) {
-	if (queue_validate(self) == 0) return;
-	struct queue_node *node_to_insert = queue_node_create(self, data, size);
-	if (self->length == 0) {
-		self->head = node_to_insert;
-		self->tail = node_to_insert;
+	qnode *new_node = qnode_construct(data, size);
+
+	/* attach node to tail */
+	if (q->length == 0) {
+		q->head = new_node;
+		q->tail = new_node;
 	} else {
-		self->tail->next = node_to_insert;
-		self->tail = node_to_insert; 
+		q->tail->next = new_node;
+		q->tail = new_node;
 	}
-	self->length++;
+
+	q->length++;
 }
 
-void queue_dequeue(struct queue *self) {
-	if (queue_validate(self) == 0) return;
-	if (self->head == NULL) return;
+void dequeue(queue *q) {
+	if (!_validate_queue(q) || q->length == 0)
+		return;
 
-	struct queue_node *node_to_remove = self->head;
-	if (self->length == 1) {
-		self->head = NULL;
-		self->tail = NULL;
+	qnode *target = q->head;
+
+	if (q->length == 1) {
+		q->head = NULL;
+		q->tail = NULL;
 	} else {
-		self->head = node_to_remove->next;
+		q->head = target->next;
 	}
-	self->length--;
-	queue_node_destruct(node_to_remove);
+
+	qnode_destruct(target);
+	q->length--;
 }
 
-bool queue_is_empty(struct queue *self) {
-	if (queue_validate(self) == 0) return true;
-	return self->length == 0;
+int is_qempty(queue *q) {
+	if (!_validate_queue(q))
+		return 1;
+
+	return (q->length == 0);
 }
 
-void* queue_get_front(struct queue *self) {
-	if (queue_validate(self) == 0) return NULL;
-	return self->head->data;
+void* get_front(queue *q) {
+	if (!_validate_queue(q) || q->length == 0)
+		return NULL;
+
+	return q->head->data;
 }
 
-void* queue_get_rear(struct queue *self) {
-	if (queue_validate(self) == 0) return NULL;
-	return self->tail->data;
+void* get_rear(queue *q) {
+	if (!_validate_queue(q) || q->length == 0)
+		return NULL;
+
+	return q->tail->data;
 } /* queue_c */

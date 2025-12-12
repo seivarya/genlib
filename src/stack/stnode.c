@@ -1,26 +1,39 @@
-// ====================
-// | > stack_node.c |
-// ====================
+/* stnode.c: stack node methods */
 
-#include "snode.h"
+#include <stdio.h>
+#include <string.h>
 
-struct stack_node stack_node_construct(size_t size, void *data) {
-	struct stack_node stack_node = {
-		.data = malloc(size),
-		.next = NULL,
-	};
+#include "stnode.h"
 
-	memcpy(stack_node.data, data, size);
-
-	return stack_node;
-}
-void stack_node_destruct(struct stack_node *stack_node) {
-	if (!stack_node) return;
-	if (stack_node == NULL) return;
-
-	if (stack_node->data) {
-		free(stack_node->data);
-		stack_node->data = NULL;
+stnode* stnode_construct(void *data, size_t size) {
+	stnode *node = malloc(sizeof(stnode));
+	if (!node) {
+		perror("=== malloc failed: stnode_construct(): sizeof(stnode) ===");
+		return NULL;
 	}
-	free(stack_node);
-} /* stack_node_c */
+
+	node->data = malloc(size);
+	if (!node->data) {
+		perror("=== malloc failed: stnode_construct(): node->data ===");
+		free(node);
+		return NULL;
+	}
+
+	memcpy(node->data, data, size);
+	node->next = NULL;
+
+	return node;
+}
+
+
+void stnode_destruct(stnode *node) {
+	if (!node)
+		return;
+
+	if (node->data) {
+		free(node->data);
+		node->data = NULL;
+	}
+
+	free(node);
+} /* stnode_c */

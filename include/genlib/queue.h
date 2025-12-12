@@ -1,38 +1,23 @@
-// ====================
-// |    > queue.h     |
-// ====================
-
 #ifndef QUEUE_H
 #define QUEUE_H
 
 #include "../../src/queue/qnode.h"
-#include <stdbool.h>
 
-struct queue {
-	struct queue_node *head;
-	struct queue_node *tail;
+typedef struct queue {
+	qnode *head;
+	qnode *tail;
 	size_t length;
+} queue;
 
-	void (*enqueue)(struct queue *self, void *data, size_t size);
-	void (*dequeue)(struct queue *self);
-	bool (*is_empty)(struct queue *self);
+	
+queue* queue_construct(void);
+void queue_destruct(struct queue *q);
 
-	void* (*get_front)(struct queue *self);
-	void* (*get_rear)(struct queue *self);
-};
+void enqueue(queue *q, void *data, size_t size);
+void dequeue(queue *q);
+int is_qempty(queue *q);
 
-struct queue queue_construct(void);
-void queue_destruct(struct queue *queue);
+void* get_front(queue *q);
+void* get_rear(queue *q);
 
-static inline int queue_validate(struct queue *queue) {
-	if (queue) return 1;
-	printf("=== queue_validate(): failed ===\n");
-	return 0;
-}
-
-static inline int queue_head_validate(struct queue *queue) {
-	if (queue->head) return 1;
-	printf("=== queue_head_validate(): failed ===\n");
-	return 0;
-} 
 #endif /* queue_h */

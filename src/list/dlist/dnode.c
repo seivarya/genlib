@@ -1,29 +1,39 @@
-// ====================
-// | > doubly_node.c |
-// ====================
+/* dnode.c: doubly linked list node methods */
+
+#include <stdio.h>
+#include <string.h>
 
 #include "dnode.h"
 
-struct doubly_node doubly_node_construct(void *data, size_t size) {
-
-	struct doubly_node doubly_node = {
-		.data = malloc(size),
-		.next = NULL,
-		.previous = NULL
-	};
-	memcpy(doubly_node.data, data, size);
-	return doubly_node;
-}
-
-
-void doubly_node_destruct(struct doubly_node *doubly_node) {
-	if (!doubly_node) return;
-	if (doubly_node == NULL) return;
-	
-	if (doubly_node->data) {
-		free(doubly_node->data);
-		doubly_node->data = NULL;
+dnode* dnode_construct(void *data, size_t size) {
+	dnode *node = malloc(sizeof(dnode));
+	if (!node) {
+		perror("=== malloc failed: dnode_construct(): sizeof(dnode) ===");
+		return NULL;
 	}
 
-	free(doubly_node);
-} /* doubly_node_c */
+	node->data = malloc(size);
+	if (!node->data) {
+		perror("=== malloc failed: dnode_construct(): node->data ===");
+		free(node);
+		return NULL;
+	}
+
+	memcpy(node->data, data, size);
+	node->next = NULL;
+	node->previous = NULL;
+
+	return node;
+}
+
+void dnode_destruct(dnode *node) {
+	if (!node)
+		return;
+
+	if (node->data) {
+		free(node->data);
+		node->data = NULL;
+	}
+
+	free(node);
+} /* dnode_c */

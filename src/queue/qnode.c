@@ -1,25 +1,36 @@
-// ====================
-// | > queue_node.h |
-// ====================
+#include <stdio.h>
+#include <string.h>
 
 #include "qnode.h"
 
-struct queue_node queue_node_construct(void *data, size_t size) {
-	struct queue_node queue_node = {
-		.next = NULL,
-		.data = malloc(size)
-	};
-
-	memcpy(queue_node.data, data, size);
-	return queue_node;
-}
-void queue_node_destruct(struct queue_node *queue_node) {
-	if (!queue_node) return;
-	if (queue_node == NULL) return;
-
-	if (queue_node->data) {
-		free(queue_node->data);
-		queue_node->data = NULL;
+qnode* qnode_construct(void *data, size_t size) {
+	qnode *node = malloc(sizeof(qnode));
+	if (!node) {
+		perror("=== malloc failed: stnode_construct(): sizeof(stnode) ===");
+		return NULL;
 	}
-	free(queue_node);
-} /* queue_node_c */
+
+	node->data = malloc(size);
+	if (!node->data) {	
+		perror("=== malloc failed: stnode_construct(): node->data ===");
+		free(node);
+		return NULL;
+	}
+
+	memcpy(node->data, data, size);
+	node->next = NULL;
+
+	return node;
+}
+
+void qnode_destruct(qnode *node) {
+	if (!node)
+		return;
+
+	if (node->data) {
+		free(node->data);
+		node->data = NULL;
+	}
+
+	free(node);
+} /* qnode_c */

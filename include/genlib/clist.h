@@ -1,51 +1,23 @@
-// =====================
-// | > circular_list.h |
-// =====================
+/* clist.h: circular linked list header file */
 
 #ifndef CLIST_H
 #define CLIST_H
 
 #include "../../src/list/clist/cnode.h"
-struct circular {
-	struct cnode *head;
-	struct cnode *tail;
-	
+
+typedef struct clist {
+	cnode *head;
+	cnode *tail;
 	size_t length;
+} clist;
 
-	void (*insert)(struct circular *self, size_t index, void *data, size_t size);
-	void (*remove)(struct circular *self, size_t index);
-	void (*reverse)(struct circular *self);
+clist* clist_construct(void);
+void clist_destruct(clist *list);
 
-	void* (*fetch_node)(struct circular *self, size_t index);
-	void* (*fetch_data)(struct circular *self, size_t index);
-};
+void clist_insert(clist *list, size_t index, void *data, size_t size);
+void clist_remove(clist *list, size_t index);
+void clist_reverse(clist *list);
 
-struct circular* circular_construct(void);
-void circular_destruct(struct circular *circular);
-
-static inline int cll_validate_list(struct circular *circular) {
-	if (!circular) {
-		fprintf(stderr, "[ERROR]: list doesn't exist\n");
-		return 0;
-	}
-	return 1;
-}
-
-static inline int cll_validate_index(struct circular *circular, size_t index) {
-	if (index >= circular->length) {
-		fprintf(stderr, "[ERROR]: index out of bounds (got %zu, length %zu)\n",
-	  index, circular->length);
-		return 0;
-	}
-	return 1;
-}
-
-static inline int cll_validate_list_head(struct circular *circular) {
-	if (!circular->head) {
-		fprintf(stderr, "[ERROR]: head is NULL\n");
-		return 0;
-	}
-    return 1;
-}
+void* clist_fetch_data(clist *list, size_t index);
 
 #endif /* clist_h */

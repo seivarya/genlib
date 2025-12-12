@@ -1,22 +1,19 @@
-// ====================
-// | > doubly_node.h |
-// ====================
+/* dnode.h: doubly linked list node interface */
 
+#ifndef DNODE_H
+#define DNODE_H
 
-#ifndef DOUBLY_NODE_H
-#define DOUBLY_NODE_H
-
-#include <stdio.h>
-#include <string.h>
 #include <stdlib.h>
 
-struct doubly_node {
+typedef struct dnode dnode;
+
+struct dnode {
 	void *data;
-	struct doubly_node *next;
-	struct doubly_node *previous; // uh
+	dnode *next;
+	dnode *previous;
 };
 
-struct doubly_node doubly_node_construct(void *data, size_t size);
-void doubly_node_destruct(struct doubly_node *doubly_node);
+dnode* dnode_construct(void *data, size_t size);
+void dnode_destruct(dnode *node);
 
-#endif /* doubly_node_h */
+#endif /* dnode_h */

@@ -1,21 +1,19 @@
-// =====================
-// | > cnode.h |
-// =====================
+/* cnode.h: circular linked list node interface */
 
 #ifndef CNODE_H
 #define CNODE_H
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-struct circular_node {
+typedef struct cnode cnode;
+
+struct cnode {
 	void *data;
-	struct circular_node *next;
-	struct circular_node *previous; 
+	cnode *next;
+	cnode *previous;
 };
 
-struct circular_node circular_node_construct(void *data, size_t size);
-void circular_node_destruct(struct circular_node *circular_node);
+cnode* cnode_construct(void *data, size_t size);
+void cnode_destruct(cnode *node);
 
 #endif /* cnode_h */

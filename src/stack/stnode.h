@@ -1,20 +1,18 @@
-// ====================
-// | > stack_node.h |
-// ====================
+/* stnode.h: stack node interface */
 
-#ifndef STACK_NODE_H
-#define STACK_NODE_H
+#ifndef STNODE_H
+#define STNODE_H
 
-#include <stdio.h>
 #include <stdlib.h>
-#include <string.h>
 
-struct stack_node {
+typedef struct stnode stnode;
+
+struct stnode {
 	void *data;
-	struct stack_node *next;
+	stnode *next;
 };
 
-struct stack_node stack_node_construct(size_t size, void *data);
-void stack_node_destruct(struct stack_node *stack_node);
+stnode* stnode_construct(void *data, size_t size);
+void stnode_destruct(stnode *node);
 
-#endif /* stack_node_c */
+#endif /* stnode_h */
