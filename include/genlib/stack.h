@@ -3,10 +3,10 @@
 #ifndef STACK_H
 #define STACK_H
 
-#include "../../src/stack/stnode.h"
+#include "../../src/stack/stknode/stknode.h"
 
 typedef struct stack {
-	struct stnode *head;
+	struct stknode *head;
 	size_t length;
 } stack;
 

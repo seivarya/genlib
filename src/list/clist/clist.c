@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "cnode.h" 
+#include "cnode/cnode.h" 
 #include "../../../include/genlib/clist.h"
 
 /* info: private methods */

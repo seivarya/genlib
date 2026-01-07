@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "dnode.h" 
+#include "dnode/dnode.h" 
 #include "../../../include/genlib/dlist.h"
 
 /* info: private methods */

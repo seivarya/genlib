@@ -1,7 +1,5 @@
-# Makefile - fixed and simplified
 CC = gcc
 
-# Compilation flags (kept your long list under FLAGS)
 FLAGS = -g3 -ggdb -O1 \
 	-Wall -Wextra -Wpedantic -Wshadow -Wformat=2 -Wconversion \
 	-Wnull-dereference -Wdouble-promotion -Wimplicit-fallthrough \
@@ -20,108 +18,39 @@ FLAGS = -g3 -ggdb -O1 \
 LDFLAGS = -fsanitize=undefined,address,leak \
 	  -lm -Wl,-z,relro -Wl,-z,now
 
+# -----------------------
 # Sources
-SLIST_SRC = src/list/slist/slist.c
-SNODE_SRC = src/list/slist/snode.c
-SLIST_TEST_SRC = tests/slist_test.c
+SLIST = src/list/slist/slist.c src/list/slist/snode/snode.c tests/slist_test.c
+DLIST = src/list/dlist/dlist.c src/list/dlist/dnode/dnode.c tests/dlist_test.c
+CLIST = src/list/clist/clist.c src/list/clist/cnode/cnode.c tests/clist_test.c
+STACK = src/stack/stack.c src/stack/stknode/stknode.c tests/stack_test.c
+QUEUE = src/queue/queue.c src/queue/qnode/qnode.c tests/queue_test.c
 
-DLIST_SRC = src/list/dlist/dlist.c
-DNODE_SRC = src/list/dlist/dnode.c
-DLIST_TEST_SRC = tests/dlist_test.c
-
-CLIST_SRC = src/list/clist/clist.c
-CNODE_SRC = src/list/clist/cnode.c
-CLIST_TEST_SRC = tests/clist_test.c
-
-STACK_SRC = src/stack/stack.c
-STNODE_SRC = src/stack/stnode.c
-STACK_TEST_SRC = tests/stack_test.c
-
-QUEUE_SRC = src/queue/queue.c
-QNODE_SRC = src/queue/qnode.c
-QUEUE_TEST_SRC = tests/queue_test.c
-
-# Object files per test
-SLIST_OBJS = snode.o slist.o slist_test.o
-DLIST_OBJS = dnode.o dlist.o dlist_test.o
-CLIST_OBJS = cnode.o clist.o clist_test.o
-STACK_OBJS = stack.o stnode.o stack_test.o
-QUEUE_OBJS = queue.o qnode.o queue_test.o
+# Convert .c → .o
+SLIST_OBJS = $(SLIST:.c=.o)
+DLIST_OBJS = $(DLIST:.c=.o)
+CLIST_OBJS = $(CLIST:.c=.o)
+STACK_OBJS = $(STACK:.c=.o)
+QUEUE_OBJS = $(QUEUE:.c=.o)
 
 .PHONY: all clean
 
 all: slist_test dlist_test clist_test stack_test queue_test
 
 # -----------------------
-# slist
-slist_test: $(SLIST_OBJS)
-	$(CC) $(SLIST_OBJS) -o $@ $(LDFLAGS)
-
-snode.o: $(SNODE_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-slist.o: $(SLIST_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-slist_test.o: $(SLIST_TEST_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
+# Link rules
+slist_test:  $(SLIST_OBJS) ; $(CC) $^ -o $@ $(LDFLAGS)
+# dlist_test:  $(DLIST_OBJS) ; $(CC) $^ -o $@ $(LDFLAGS)
+# clist_test:  $(CLIST_OBJS) ; $(CC) $^ -o $@ $(LDFLAGS)
+# stack_test:  $(STACK_OBJS) ; $(CC) $^ -o $@ $(LDFLAGS)
+# queue_test:  $(QUEUE_OBJS) ; $(CC) $^ -o $@ $(LDFLAGS)
 
 # -----------------------
-# dlist
-dlist_test: $(DLIST_OBJS)
-	$(CC) $(DLIST_OBJS) -o $@ $(LDFLAGS)
-
-dnode.o: $(DNODE_SRC)
+# Generic compile rule
+%.o: %.c
 	$(CC) $(FLAGS) -c $< -o $@
 
-dlist.o: $(DLIST_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-dlist_test.o: $(DLIST_TEST_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-# -----------------------
-# clist
-clist_test: $(CLIST_OBJS)
-	$(CC) $(CLIST_OBJS) -o $@ $(LDFLAGS)
-
-cnode.o: $(CNODE_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-clist.o: $(CLIST_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-clist_test.o: $(CLIST_TEST_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-# -----------------------
-# stack
-stack_test: $(STACK_OBJS)
-	$(CC) $(STACK_OBJS) -o $@ $(LDFLAGS)
-
-stnode.o: $(STNODE_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-stack.o: $(STACK_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-stack_test.o: $(STACK_TEST_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-# -----------------------
-# queue
-queue_test: $(QUEUE_OBJS)
-	$(CC) $(QUEUE_OBJS) -o $@ $(LDFLAGS)
-
-qnode.o: $(QNODE_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-queue.o: $(QUEUE_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-queue_test.o: $(QUEUE_TEST_SRC)
-	$(CC) $(FLAGS) -c $< -o $@
-
-# -----------------------
 clean:
-	rm -f *.o slist_test dlist_test clist_test stack_test queue_test
+	rm -f $(SLIST_OBJS) $(DLIST_OBJS) $(CLIST_OBJS) \
+	      $(STACK_OBJS) $(QUEUE_OBJS) \
+	      slist_test dlist_test clist_test stack_test queue_test

@@ -1,20 +1,20 @@
-/* stnode.c: stack node methods */
+/* stknode.c: stack node methods */
 
 #include <stdio.h>
 #include <string.h>
 
-#include "stnode.h"
+#include "stknode.h"
 
-stnode* stnode_construct(void *data, size_t size) {
-	stnode *node = malloc(sizeof(stnode));
+stknode* stknode_construct(void *data, size_t size) {
+	stknode *node = malloc(sizeof(stknode));
 	if (!node) {
-		perror("=== malloc failed: stnode_construct(): sizeof(stnode) ===");
+		perror("=== malloc failed: stknode_construct(): sizeof(stknode) ===");
 		return NULL;
 	}
 
 	node->data = malloc(size);
 	if (!node->data) {
-		perror("=== malloc failed: stnode_construct(): node->data ===");
+		perror("=== malloc failed: stknode_construct(): node->data ===");
 		free(node);
 		return NULL;
 	}
@@ -26,7 +26,7 @@ stnode* stnode_construct(void *data, size_t size) {
 }
 
 
-void stnode_destruct(stnode *node) {
+void stknode_destruct(stknode *node) {
 	if (!node)
 		return;
 
@@ -36,4 +36,4 @@ void stnode_destruct(stnode *node) {
 	}
 
 	free(node);
-} /* stnode_c */
+} /* stknode_c */

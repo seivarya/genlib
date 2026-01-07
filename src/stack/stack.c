@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "stnode.h"
+#include "stknode/stknode.h"
 #include "../../include/genlib/stack.h"
 
 /* info: private methods */
@@ -45,10 +45,10 @@ void stack_destruct(stack *stk) {
 		return;
 
 	/* destroy all nodes */
-	stnode *current = stk->head;
+	stknode *current = stk->head;
 	while (current != NULL) {
-		stnode *next = current->next;
-		stnode_destruct(current);
+		stknode *next = current->next;
+		stknode_destruct(current);
 		current = next;
 	}
 
@@ -59,7 +59,7 @@ void push(stack *stk, void *data, size_t size) {
 	if (!_validate_stack(stk))
 		return;
 
-	stnode *new_node = stnode_construct(data, size);
+	stknode *new_node = stknode_construct(data, size);
 
 	/* insert at head */
 	if (stk->length == 0) {
@@ -76,7 +76,7 @@ void pop(stack *stk) {
 	if (!_validate_stack(stk) || stk->length == 0)
 		return;
 
-	stnode *target = stk->head;
+	stknode *target = stk->head;
 
 	/* update head */
 	if (stk->length == 1) {
@@ -85,7 +85,7 @@ void pop(stack *stk) {
 		stk->head = target->next;
 	}
 
-	stnode_destruct(target);
+	stknode_destruct(target);
 	stk->length--;
 }
 

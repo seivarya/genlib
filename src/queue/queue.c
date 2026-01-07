@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "qnode.h"
+#include "qnode/qnode.h"
 #include "../../include/genlib/queue.h"
 
 /* info: private methods */

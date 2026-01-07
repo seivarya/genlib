@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "snode.h" 
+#include "snode/snode.h" 
 #include "../../../include/genlib/slist.h"
 
 /* info: private methods */
