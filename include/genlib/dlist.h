@@ -3,7 +3,7 @@
 #ifndef DLIST_H
 #define DLIST_H
 
-#include "../../src/list/dlist/dnode/dnode.h"
+#include "../../src/structures/list/dlist/dnode/dnode.h"
 
 typedef struct dlist {
 	dnode *head;

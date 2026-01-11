@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #include "stknode/stknode.h"
-#include "../../include/genlib/stack.h"
+#include "../../../include/genlib/stack.h"
 
 /* info: private methods */
 

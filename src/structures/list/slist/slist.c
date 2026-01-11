@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #include "snode/snode.h" 
-#include "../../../include/genlib/slist.h"
+#include "../../../../include/genlib/slist.h"
 
 /* info: private methods */
 

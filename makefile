@@ -40,7 +40,7 @@ all: slist_test dlist_test clist_test stack_test queue_test
 # -----------------------
 # Link rules
 slist_test:  $(SLIST_OBJS) ; $(CC) $^ -o $@ $(LDFLAGS)
-# dlist_test:  $(DLIST_OBJS) ; $(CC) $^ -o $@ $(LDFLAGS)
+dlist_test:  $(DLIST_OBJS) ; $(CC) $^ -o $@ $(LDFLAGS)
 # clist_test:  $(CLIST_OBJS) ; $(CC) $^ -o $@ $(LDFLAGS)
 # stack_test:  $(STACK_OBJS) ; $(CC) $^ -o $@ $(LDFLAGS)
 # queue_test:  $(QUEUE_OBJS) ; $(CC) $^ -o $@ $(LDFLAGS)

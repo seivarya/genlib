@@ -4,7 +4,7 @@
 #include <stdio.h>
 
 #include "dnode/dnode.h" 
-#include "../../../include/genlib/dlist.h"
+#include "../../../../include/genlib/dlist.h"
 
 /* info: private methods */
 

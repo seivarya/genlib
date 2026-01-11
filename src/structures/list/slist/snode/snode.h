@@ -5,6 +5,13 @@
 
 #include <stdlib.h>
 
+typedef struct td td;
+
+struct td {
+	char* name;
+};
+
+
 typedef struct snode snode;
 
 struct snode {

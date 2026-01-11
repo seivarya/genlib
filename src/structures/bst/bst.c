@@ -4,5 +4,5 @@
 #include <stdio.h>
 
 #include "btnode/btnode.h"
-#include "../../include/genlib/bst.h"
+#include "../../../include/genlib/bst.h"
 
