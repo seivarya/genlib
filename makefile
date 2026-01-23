@@ -20,11 +20,11 @@ LDFLAGS = -fsanitize=undefined,address,leak \
 
 # -----------------------
 # Sources
-SLIST = src/list/slist/slist.c src/list/slist/snode/snode.c tests/slist_test.c
-DLIST = src/list/dlist/dlist.c src/list/dlist/dnode/dnode.c tests/dlist_test.c
-CLIST = src/list/clist/clist.c src/list/clist/cnode/cnode.c tests/clist_test.c
-STACK = src/stack/stack.c src/stack/stknode/stknode.c tests/stack_test.c
-QUEUE = src/queue/queue.c src/queue/qnode/qnode.c tests/queue_test.c
+SLIST = src/structures/list/slist/slist.c src/structures/list/slist/snode/snode.c tests/slist_test.c
+DLIST = src/structures/list/dlist/dlist.c src/structures/list/dlist/dnode/dnode.c tests/dlist_test.c
+CLIST = src/structures/list/clist/clist.c src/structures/list/clist/cnode/cnode.c tests/clist_test.c
+STACK = src/structures/stack/stack.c src/structures/stack/stknode/stknode.c tests/stack_test.c
+QUEUE = src/structures/queue/queue.c src/structures/queue/qnode/qnode.c tests/queue_test.c
 
 # Convert .c → .o
 SLIST_OBJS = $(SLIST:.c=.o)
