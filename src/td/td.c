@@ -1,6 +1,8 @@
-#include "td.h"
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
+#include "../../include/genlib/td.h"
 
 int td_validator(const td *t) {
 	if (t && t->magic == TD_MAGIC) {
@@ -68,62 +70,126 @@ size_t hash_str(void *data) {
 	return hash; // test; it's a very verys shit hash function for actual use case
 }
 
+int compare_int(void *a, void *b) {
+	int i1 = *(int *)a;
+	int i2 = *(int *)b;
+
+	return i1 - i2; // basic only for now
+
+}
+
+int compare_str(void *a, void *b) {
+	char * s1 = (char *)a;
+	char * s2 = (char *)b;
+	int diff = strcmp(s1, s2);
+	return diff;
+}
+
+void destruct_int(void *data) { // user's custom destructor for objects
+	if (data) {
+		free(data);
+	}
+}
+
+void destruct_str(void *data) { // user's custom destructor for objects
+	if (data) {
+		free(data);
+	}
+}
+
+// int (*compare)(void *a, void *b); 
+// 	void * (*copy)(void *data); 
+// 	void (*destruct)(void *data); // user's custom destructor for objects
 
 const td TD_STR = {
 	.magic = TD_MAGIC,
 	.size  = sizeof(char *),
 	.print = print_str,
-	.hash = hash_str
-	
+	.hash = hash_str,
+	.compare = NULL,
+	.copy = NULL,
+	.destruct = NULL
+
 };
 
 const td TD_INT = {
 	.magic = TD_MAGIC,
 	.size = sizeof(int),
 	.print = print_int,
-	.hash = hash_int
+	.hash = hash_int,
+	.compare = NULL,
+	.copy = NULL,
+	.destruct = NULL
 };
 
 const td TD_UINT = {
 	.magic = TD_MAGIC,
 	.size = sizeof(unsigned int),
-	.print = print_uint
+	.print = print_uint,
+	.hash = NULL,
+	.compare = NULL,
+	.copy = NULL,
+	.destruct = NULL
 };
 
 const td TD_LONG = {
 	.magic = TD_MAGIC,
 	.size = sizeof(long),
-	.print = print_long
+	.print = print_long,
+	.hash = NULL,
+	.compare = NULL,
+	.copy = NULL,
+	.destruct = NULL
 };
 
 const td TD_ULONG = {
 	.magic = TD_MAGIC,
 	.size = sizeof(unsigned long),
-	.print = print_ulong
+	.print = print_ulong,
+	.hash = NULL,
+	.compare = NULL,
+	.copy = NULL,
+	.destruct = NULL
 };
 
 const td TD_SHORT = {
 	.magic = TD_MAGIC,
 	.size = sizeof(short),
-	.print = print_short
+	.print = print_short,
+	.hash = NULL,
+	.compare = NULL,
+	.copy = NULL,
+	.destruct = NULL
 };
 
 const td TD_USHORT = {
 	.magic = TD_MAGIC,
 	.size = sizeof(unsigned short),
-	.print = print_ushort
+	.print = print_ushort,
+	.hash = NULL,
+	.compare = NULL,
+	.copy = NULL,
+	.destruct = NULL
 };
 
 const td TD_BOOL = {
 	.magic = TD_MAGIC,
 	.size = sizeof(int),    // C has no true bool in stdlib unless <stdbool.h>
-	.print = print_bool
+	.print = print_bool,
+	.hash = NULL,
+	.compare = NULL,
+	.copy = NULL,
+	.destruct = NULL
 };
 
 const td TD_SIZE_T = {
 	.magic = TD_MAGIC,
 	.size = sizeof(size_t),
 	.print = print_size_t,
+	.hash = NULL,
+	.compare = NULL,
+	.copy = NULL,
+	.destruct = NULL
 };
 
 

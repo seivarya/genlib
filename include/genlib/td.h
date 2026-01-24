@@ -21,4 +21,15 @@ struct td {
 
 int td_validator(const td *t);
 
+extern const td TD_INT;
+extern const td TD_STR;
+extern const td TD_UINT;
+extern const td TD_LONG;
+extern const td TD_ULONG;
+extern const td TD_SHORT;
+extern const td TD_USHORT;
+extern const td TD_BOOL;
+extern const td TD_SIZE_T;
+extern const td TD_CHAR;
+
 #endif

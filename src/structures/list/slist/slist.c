@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "snode/snode.h" 
+#include "../../../../include/genlib/td.h"
 #include "../../../../include/genlib/slist.h"
 
 /* info: private methods */
@@ -63,14 +64,14 @@ void slist_destruct(slist *list) {
 	free(list);
 }
 
-void slist_insert(slist *list, size_t index, void *data, size_t size) {
+void slist_insert(slist *list, size_t index, void *data, const td *type) {
 	if (!_validate_slist(list))
 		return;
 
 	if (index > list->length)
 		return;
 
-	snode *new_node = snode_construct(data, size);
+	snode *new_node = snode_construct(data, type);
 
 	/* insert at head */
 	if (index == 0) {
@@ -111,13 +112,13 @@ void slist_remove(slist *list, size_t index) {
 	list->length--;
 }
 
-void* slist_fetch_data(slist *list, size_t index) {
-	if (!_validate_sindex(list, index))
-		return NULL;
-
-	snode *node = _slist_iterate(list, index);
-	return node ? node->data : NULL;
-}
+// void* slist_fetch_data(slist *list, size_t index) {
+// 	if (!_validate_sindex(list, index))
+// 		return NULL;
+//
+// 	snode *node = _slist_iterate(list, index);
+// 	return node ? node->data : NULL;
+// }
 
 void slist_reverse(slist *list) {
 	if (!_validate_slist(list) || list->length < 2)

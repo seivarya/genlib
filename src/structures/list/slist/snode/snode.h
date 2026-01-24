@@ -4,22 +4,17 @@
 #define SNODE_H
 
 #include <stdlib.h>
-
-typedef struct td td;
-
-struct td {
-	char* name;
-};
-
+#include "../../../../../include/genlib/td.h"
 
 typedef struct snode snode;
 
 struct snode {
 	void *data;
+	const td *type;
 	snode *next;
 };
 
-snode* snode_construct(void *data, size_t size);
+snode* snode_construct(void *data, const td *type);
 void snode_destruct(snode *node);
 
 #endif /* snode_h */
