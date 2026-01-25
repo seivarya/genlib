@@ -54,11 +54,11 @@ void queue_destruct(queue *q) {
 	free(q);
 }
 
-void enqueue(queue *q, void *data, size_t size) {
+void enqueue(queue *q, void *data, const td *type) {
 	if (!_validate_queue(q))
 		return;
 
-	qnode *new_node = qnode_construct(data, size);
+	qnode *new_node = qnode_construct(data, type);
 
 	/* attach node to tail */
 	if (q->length == 0) {
@@ -95,7 +95,7 @@ int is_qempty(queue *q) {
 
 	return (q->length == 0);
 }
-
+// TODO: changes needed here! // #1
 void* get_front(queue *q) {
 	if (!_validate_queue(q) || q->length == 0)
 		return NULL;

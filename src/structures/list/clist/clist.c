@@ -75,14 +75,14 @@ void clist_destruct(clist *list) {
 	free(list);
 }
 
-void clist_insert(clist *list, size_t index, void *data, size_t size) {
+void clist_insert(clist *list, size_t index, void *data, const td *type) {
 	if (!_validate_clist(list))
 		return;
 
 	if (index > list->length)
 		return;
 
-	cnode *new_node = cnode_construct(data, size);
+	cnode *new_node = cnode_construct(data, type);
 	if (!new_node)
 		return;
 

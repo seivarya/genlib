@@ -4,6 +4,7 @@
 #define STACK_H
 
 #include "../../src/structures/stack/stknode/stknode.h"
+#include "td.h"
 
 typedef struct stack {
 	struct stknode *head;
@@ -13,7 +14,7 @@ typedef struct stack {
 stack* stack_construct(void);
 void stack_destruct(stack *stk);
 
-void push(stack *stk, void *data, size_t size);
+void push(stack *stk, void *data, const td *type);
 void pop(stack *stk);
 int is_empty(stack *stk);
 void* peek(stack *stk);

@@ -55,11 +55,11 @@ void stack_destruct(stack *stk) {
 	free(stk);
 } // do stacks even have reverse() method ???
 
-void push(stack *stk, void *data, size_t size) {
+void push(stack *stk, void *data, const td *type) {
 	if (!_validate_stack(stk))
 		return;
 
-	stknode *new_node = stknode_construct(data, size);
+	stknode *new_node = stknode_construct(data, type);
 
 	/* insert at head */
 	if (stk->length == 0) {

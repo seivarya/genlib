@@ -4,16 +4,18 @@
 #define CNODE_H
 
 #include <stdlib.h>
+#include "../../../../../include/genlib/td.h"
 
 typedef struct cnode cnode;
 
 struct cnode {
 	void *data;
 	cnode *next;
+	const td *type;
 	cnode *previous;
 };
 
-cnode* cnode_construct(void *data, size_t size);
+cnode* cnode_construct(void *data, const td *type);
 void cnode_destruct(cnode *node);
 
 #endif /* cnode_h */

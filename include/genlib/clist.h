@@ -4,6 +4,7 @@
 #define CLIST_H
 
 #include "../../src/structures/list/clist/cnode/cnode.h"
+#include "td.h"
 
 typedef struct clist {
 	cnode *head;
@@ -14,7 +15,7 @@ typedef struct clist {
 clist* clist_construct(void);
 void clist_destruct(clist *list);
 
-void clist_insert(clist *list, size_t index, void *data, size_t size);
+void clist_insert(clist *list, size_t index, void *data, const td *type);
 void clist_remove(clist *list, size_t index);
 void clist_reverse(clist *list);
 

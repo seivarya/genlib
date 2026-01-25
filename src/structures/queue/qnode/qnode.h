@@ -2,15 +2,17 @@
 #define QNODE_H
 
 #include <stdlib.h>
+#include "../../../../include/genlib/td.h"
 
 typedef struct qnode qnode;
 
 struct qnode {
 	void *data;
+	const td *type;
 	qnode *next;
 };
 
-qnode* qnode_construct(void *data, size_t size);
+qnode* qnode_construct(void *data, const td *type);
 void qnode_destruct(qnode *node);
 
 #endif /* qnode_h */

@@ -1,35 +1,36 @@
 #include <stdio.h>
-#include <string.h>
 
 #include "qnode.h"
 
-qnode* qnode_construct(void *data, size_t size) {
+qnode* qnode_construct(void *data, const td *type) {
 	qnode *node = malloc(sizeof(qnode));
 	if (!node) {
-		perror("=== malloc failed: stnode_construct(): sizeof(stnode) ===");
+		perror("=== malloc failed: snode_construct(): sizeof(dnode) ===");
 		return NULL;
 	}
-
-	node->data = malloc(size);
-	if (!node->data) {	
-		perror("=== malloc failed: stnode_construct(): node->data ===");
-		free(node);
-		return NULL;
+	if ( type == NULL || !td_validator(type)) {
+		perror("=== TD_MAGIC failed or type null ===\n");
+		exit(3);
 	}
 
-	memcpy(node->data, data, size);
+
+	node->type = type;
 	node->next = NULL;
+
+	if (type->copy) {
+		node->data = type->copy(data);
+	} else {
+		node->data = data;
+	}
 
 	return node;
 }
 
 void qnode_destruct(qnode *node) {
-	if (!node)
-		return;
+	if (!node) return;
 
-	if (node->data) {
-		free(node->data);
-		node->data = NULL;
+	if (node->type && node->type->destruct) {
+		node->type->destruct(node);
 	}
 
 	free(node);

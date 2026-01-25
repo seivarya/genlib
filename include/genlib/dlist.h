@@ -14,7 +14,7 @@ typedef struct dlist {
 dlist* dlist_construct(void);
 void dlist_destruct(dlist *list);
 
-void dlist_insert(dlist *list, size_t index, void *data, size_t size);
+void dlist_insert(dlist *list, size_t index, void *data, const td *type);
 void dlist_remove(dlist *list, size_t index);
 void dlist_reverse(dlist *list);
 

@@ -116,10 +116,6 @@ const td TD_INT = {
 	.magic = TD_MAGIC,
 	.size = sizeof(int),
 	.print = print_int,
-	.hash = hash_int,
-	.compare = NULL,
-	.copy = NULL,
-	.destruct = NULL
 };
 
 const td TD_UINT = {

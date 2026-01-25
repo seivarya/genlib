@@ -5,8 +5,11 @@
 
 snode* snode_construct(void *data, const td *type) {
 
-	snode *node;
-	node = malloc(sizeof(snode));
+	snode *node = malloc(sizeof(snode));
+	if (!node) {
+		perror("=== malloc failed: snode_construct(): sizeof(dnode) ===");
+		return NULL;
+	}
 	if ( type == NULL || !td_validator(type)) {
 		perror("=== TD_MAGIC failed or type null ===\n");
 		exit(3);

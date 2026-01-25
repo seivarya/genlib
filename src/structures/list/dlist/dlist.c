@@ -4,7 +4,9 @@
 #include <stdio.h>
 
 #include "dnode/dnode.h" 
+#include "../../../../include/genlib/td.h"
 #include "../../../../include/genlib/dlist.h"
+
 
 /* info: private methods */
 
@@ -77,14 +79,14 @@ void dlist_destruct(dlist *list) {
 	free(list);
 }
 
-void dlist_insert(dlist *list, size_t index, void *data, size_t size) {
+void dlist_insert(dlist *list, size_t index, void *data, const td *type) {
 	if (!_validate_dlist(list))
 		return;
 
 	if (index > list->length)
 		return;
 
-	dnode *new_node = dnode_construct(data, size);
+	dnode *new_node = dnode_construct(data, type);
 	if (!new_node)
 		return;
 
@@ -159,12 +161,12 @@ void dlist_remove(dlist *list, size_t index) {
 	list->length--;
 }
 
-void* dlist_fetch_data(dlist *list, size_t index) {
-	if (!_validate_dindex(list, index)) return NULL;
-
-	dnode *node = _dlist_iterate(list, index);
-	return node ? node->data : NULL;
-}
+// void* dlist_fetch_data(dlist *list, size_t index) {
+// 	if (!_validate_dindex(list, index)) return NULL;
+//
+// 	dnode *node = _dlist_iterate(list, index);
+// 	return node ? node->data : NULL;
+// }
 
 void dlist_reverse(dlist *list) {
 	if (!_validate_dlist(list) || list->length < 2) return;
