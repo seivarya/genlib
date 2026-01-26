@@ -4,8 +4,8 @@
 #include "snode.h"
 
 snode* snode_construct(void *data, const td *type) {
-
 	snode *node = malloc(sizeof(snode));
+
 	if (!node) {
 		perror("=== malloc failed: snode_construct(): sizeof(dnode) ===");
 		return NULL;

@@ -4,7 +4,7 @@
 #define SNODE_H
 
 #include <stdlib.h>
-#include "../../../../../include/genlib/td.h"
+#include <genlib/td.h>
 
 typedef struct snode snode;
 

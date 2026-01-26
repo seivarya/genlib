@@ -17,6 +17,7 @@ void stack_destruct(stack *stk);
 void push(stack *stk, void *data, const td *type);
 void pop(stack *stk);
 int is_empty(stack *stk);
+
 void* peek(stack *stk);
 
 #endif /* stack_h */

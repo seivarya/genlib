@@ -1,13 +1,16 @@
-#include <stdio.h>
+/* qnode.c: queue not methods */
 
+#include <stdio.h>
 #include "qnode.h"
 
 qnode* qnode_construct(void *data, const td *type) {
 	qnode *node = malloc(sizeof(qnode));
+
 	if (!node) {
 		perror("=== malloc failed: snode_construct(): sizeof(dnode) ===");
 		return NULL;
 	}
+
 	if ( type == NULL || !td_validator(type)) {
 		perror("=== TD_MAGIC failed or type null ===\n");
 		exit(3);

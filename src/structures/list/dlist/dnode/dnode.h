@@ -4,7 +4,7 @@
 #define DNODE_H
 
 #include <stdlib.h>
-#include "../../../../../include/genlib/td.h"
+#include <genlib/td.h>
 
 typedef struct dnode dnode;
 

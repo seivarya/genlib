@@ -5,14 +5,17 @@
 
 dnode* dnode_construct(void *data, const td *type) {
 	dnode *node = malloc(sizeof(dnode));
+
 	if (!node) {
 		perror("=== malloc failed: dnode_construct(): sizeof(dnode) ===");
 		return NULL;
 	}
+
 	if (type == NULL || !td_validator(type)) {
 		perror("=== TD_MAGIC failed or type null ===\n");
 		exit(3);
 	}
+
 	node->type = type;
 	node->next = NULL;
 	node->previous = NULL;

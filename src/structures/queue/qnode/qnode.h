@@ -1,8 +1,10 @@
+/* qnode.h: queue node interface */
+
 #ifndef QNODE_H
 #define QNODE_H
 
 #include <stdlib.h>
-#include "../../../../include/genlib/td.h"
+#include <genlib/td.h>
 
 typedef struct qnode qnode;
 
