@@ -174,16 +174,19 @@ void clist_remove(clist *list, size_t index) {
 	list->length--;
 }
 
-void* clist_fetch_data(clist *list, size_t index) {
+void* clist_fetch_node(clist *list, size_t index) {
 	if (!_validate_dindex(list, index)) return NULL;
 
 	cnode *node = _clist_iterate(list, index);
-	return node ? node->data : NULL;
+	if (!node) { printf("=== node not found ===\n"); }
+	return node;
 }
 
-void clist_reverse(clist *list) {
-	if (!_validate_clist(list) || list->length < 2) return;
-
-	//  TODO: later
-
+void clist_print(clist *list) {
+	cnode *current = list->head;
+	while (current != NULL) {
+		const td *type = current->type;
+		type->print(current->data);
+		current = current->next;
+	}
 } /* clist_c */

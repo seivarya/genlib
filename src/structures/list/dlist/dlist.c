@@ -161,27 +161,19 @@ void dlist_remove(dlist *list, size_t index) {
 	list->length--;
 }
 
-// void* dlist_fetch_data(dlist *list, size_t index) {
-// 	if (!_validate_dindex(list, index)) return NULL;
-//
-// 	dnode *node = _dlist_iterate(list, index);
-// 	return node ? node->data : NULL;
-// }
+void* dlist_fetch_node(dlist *list, size_t index) {
+	if (!_validate_dindex(list, index)) return NULL;
 
-void dlist_reverse(dlist *list) {
-	if (!_validate_dlist(list) || list->length < 2) return;
+	dnode *node = _dlist_iterate(list, index);
+	if (!node) { printf("=== node not found ===\n"); }
+	return node;
+}
 
+void dlist_print(dlist *list) {
 	dnode *current = list->head;
-	dnode *temp = NULL;
-	list->tail = list->head;
-
-	while(current != NULL) {
-		temp = current->previous;
-		current->previous = current->next;
-		current->next = temp;
-		current = current->previous;
-	} //  WARNING: issue if the length is 2 ??
-	if (temp) { 
-		list->head = temp->previous ;
+	while (current != NULL) {
+		const td *type = current->type;
+		type->print(current->data);
+		current = current->next;
 	}
 } /* dlist_c */

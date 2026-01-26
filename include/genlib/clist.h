@@ -17,8 +17,8 @@ void clist_destruct(clist *list);
 
 void clist_insert(clist *list, size_t index, void *data, const td *type);
 void clist_remove(clist *list, size_t index);
-void clist_reverse(clist *list);
+void clist_print(clist *list);
 
-void* clist_fetch_data(clist *list, size_t index);
+void* clist_fetch_node(clist *list, size_t index);
 
 #endif /* clist_h */

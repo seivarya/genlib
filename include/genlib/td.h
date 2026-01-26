@@ -12,10 +12,10 @@ struct td {
 	uint32_t magic;
 	size_t size;
 	void (*print)(void *); 
-	size_t (*hash)(void *key); 
+	size_t (*hash)(void *key);
 	int (*compare)(void *a, void *b); 
-	void * (*copy)(void *data); 
 	void (*destruct)(void *data); // user's custom destructor for objects
+	void * (*copy)(void *data); 
 
 };
 

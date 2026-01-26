@@ -14,10 +14,10 @@ typedef struct slist {
 slist* slist_construct(void);
 void slist_destruct(slist *slist);
 
-void slist_insert(slist *self, size_t index, void *data, const td *type);
-void slist_remove(slist *self, size_t index);
-void slist_reverse(slist *self);
+void slist_insert(slist *list, size_t index, void *data, const td *type);
+void slist_remove(slist *list, size_t index);
+void slist_print(slist *list);
 
-void* slist_fetch_data(slist *self, size_t index);
+void* slist_fetch_node(slist *list, size_t index);
 
 #endif /* slist_h */

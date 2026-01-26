@@ -112,29 +112,20 @@ void slist_remove(slist *list, size_t index) {
 	list->length--;
 }
 
-// void* slist_fetch_data(slist *list, size_t index) {
-// 	if (!_validate_sindex(list, index))
-// 		return NULL;
-//
-// 	snode *node = _slist_iterate(list, index);
-// 	return node ? node->data : NULL;
-// }
+void* slist_fetch_node(slist *list, size_t index) {
+	if (!_validate_sindex(list, index))
+		return NULL;
 
-void slist_reverse(slist *list) {
-	if (!_validate_slist(list) || list->length < 2)
-		return;
+	snode *node = _slist_iterate(list, index);
+	if (!node) { printf("=== node not found ===\n"); }
+	return node;
+}
 
-	/* iterative reverse */
-	snode *previous = NULL;
+void slist_print(slist *list) {
 	snode *current = list->head;
-	snode *next = NULL;
-
 	while (current != NULL) {
-		next = current->next;
-		current->next = previous;
-		previous = current;
-		current = next;
+		const td *type = current->type;
+		type->print(current->data);
+		current = current->next;
 	}
-
-	list->head = previous;
 } /* slist_c */
