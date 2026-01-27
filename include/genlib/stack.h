@@ -3,8 +3,8 @@
 #ifndef STACK_H
 #define STACK_H
 
-#include "../../src/structures/stack/stknode/stknode.h"
 #include "td.h"
+#include "stack/stknode/stknode.h"
 
 typedef struct stack {
 	struct stknode *head;

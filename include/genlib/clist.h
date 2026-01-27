@@ -3,8 +3,8 @@
 #ifndef CLIST_H
 #define CLIST_H
 
-#include "../../src/structures/list/clist/cnode/cnode.h"
 #include "td.h"
+#include "list/clist/cnode/cnode.h"
 
 typedef struct clist {
 	cnode *head;

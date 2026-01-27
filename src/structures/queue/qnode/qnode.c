@@ -16,7 +16,6 @@ qnode* qnode_construct(void *data, const td *type) {
 		exit(3);
 	}
 
-
 	node->type = type;
 	node->next = NULL;
 

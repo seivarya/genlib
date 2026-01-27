@@ -3,8 +3,8 @@
 #ifndef DLIST_H
 #define DLIST_H
 
-#include "../../src/structures/list/dlist/dnode/dnode.h"
 #include "td.h"
+#include "list/dlist/dnode/dnode.h"
 
 typedef struct dlist {
 	dnode *head;

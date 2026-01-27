@@ -18,7 +18,7 @@ CFLAGS = -g3 -ggdb -O1 \
 	 -fno-omit-frame-pointer -fno-optimize-sibling-calls \
 	 -fstack-protector-all -D_FORTIFY_SOURCE=2 -fPIC \
 	 -std=c11 -msse -mfpmath=sse \
-	 -Iinclude -Isrc
+	 -Iinclude -Isrc/structures
 
 LDFLAGS = -fsanitize=undefined,address,leak -lm
 

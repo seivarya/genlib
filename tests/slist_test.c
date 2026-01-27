@@ -1,4 +1,4 @@
-#include "../include/genlib/genlib.h"
+#include <genlib/genlib.h>
 #include <stdio.h>
 
 void nig_print(void *data);
