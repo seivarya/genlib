@@ -1,18 +1,19 @@
 /* stknode.c: stack node methods */
 
 #include <stdio.h>
+#include <genlib/td.h> 
 #include "stknode.h"
 
 stknode* stknode_construct(void *data, const td *type) {
 	stknode *node = malloc(sizeof(stknode));
 
 	if (!node) {
-		perror("=== malloc failed: snode_construct(): sizeof(dnode) ===");
+		perror("=== malloc failed: stknode_construct(): sizeof(stknode) ===");
 		return NULL;
 	}
 
 	if ( type == NULL || !td_validator(type)) {
-		perror("=== TD_MAGIC failed or type null ===\n");
+			fprintf(stderr, "Fatal Error: %s: Invalid or NULL type descriptor provided. Exiting.\n", __func__);
 		exit(3);
 	}
 
@@ -33,7 +34,7 @@ void stknode_destruct(stknode *node) {
 	if (!node) return;
 
 	if (node->type && node->type->destruct) {
-		node->type->destruct(node);
+		node->type->destruct(node->data);
 	}
 
 	free(node);

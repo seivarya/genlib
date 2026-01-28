@@ -4,7 +4,7 @@
 #define CNODE_H
 
 #include <stdlib.h>
-#include "../../../../../include/genlib/td.h"
+#include <genlib/td.h>
 
 typedef struct cnode cnode;
 

@@ -2,6 +2,7 @@
 
 #include <stdio.h>
 #include "dnode.h"
+#include <genlib/td.h>
 
 dnode* dnode_construct(void *data, const td *type) {
 	dnode *node = malloc(sizeof(dnode));
@@ -12,7 +13,7 @@ dnode* dnode_construct(void *data, const td *type) {
 	}
 
 	if (type == NULL || !td_validator(type)) {
-		perror("=== TD_MAGIC failed or type null ===\n");
+			fprintf(stderr, "Fatal Error: %s: Invalid or NULL type descriptor provided. Exiting.\n", __func__);
 		exit(3);
 	}
 
@@ -33,7 +34,7 @@ void dnode_destruct(dnode *node) {
 	if (!node) return;
 
 	if (node->type && node->type->destruct) {
-		node->type->destruct(node);
+		node->type->destruct(node->data);
 	}
 
 	free(node);

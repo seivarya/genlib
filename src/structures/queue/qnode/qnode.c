@@ -2,17 +2,18 @@
 
 #include <stdio.h>
 #include "qnode.h"
+#include <genlib/td.h>
 
 qnode* qnode_construct(void *data, const td *type) {
 	qnode *node = malloc(sizeof(qnode));
 
 	if (!node) {
-		perror("=== malloc failed: snode_construct(): sizeof(dnode) ===");
+		perror("=== malloc failed: qnode_construct(): sizeof(qnode) ===");
 		return NULL;
 	}
 
 	if ( type == NULL || !td_validator(type)) {
-		perror("=== TD_MAGIC failed or type null ===\n");
+			fprintf(stderr, "Fatal Error: %s: Invalid or NULL type descriptor provided. Exiting.\n", __func__);
 		exit(3);
 	}
 
@@ -32,7 +33,7 @@ void qnode_destruct(qnode *node) {
 	if (!node) return;
 
 	if (node->type && node->type->destruct) {
-		node->type->destruct(node);
+		node->type->destruct(node->data);
 	}
 
 	free(node);

@@ -1,18 +1,19 @@
 /* snode.c: singly linked list node methods */
 
 #include <stdio.h>
+#include <genlib/td.h>
 #include "snode.h"
 
 snode* snode_construct(void *data, const td *type) {
 	snode *node = malloc(sizeof(snode));
 
 	if (!node) {
-		perror("=== malloc failed: snode_construct(): sizeof(dnode) ===");
+		perror("=== malloc failed: snode_construct(): sizeof(snode) ===");
 		return NULL;
 	}
 
 	if ( type == NULL || !td_validator(type)) {
-		perror("=== TD_MAGIC failed or type null ===\n");
+			fprintf(stderr, "Fatal Error: %s: Invalid or NULL type descriptor provided. Exiting.\n", __func__);
 		exit(3);
 	}
 
@@ -33,7 +34,7 @@ void snode_destruct(snode *node) {
 	if (!node) return;
 
 	if (node->type && node->type->destruct) {
-		node->type->destruct(node);
+		node->type->destruct(node->data);
 	}
 
 	free(node);

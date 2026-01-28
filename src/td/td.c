@@ -5,11 +5,16 @@
 #include "../../include/genlib/td.h"
 
 int td_validator(const td *t) {
-	if (t && t->magic == TD_MAGIC) {
-		return 1;
+	if (t == NULL) {
+		fprintf(stderr, "Error: %s: NULL type descriptor provided for validation.\n", __func__);
+		return 0;
 	}
-	perror("=== TD_MAGIC: failed === \n"); // TODO: maybe work on *good* error messages later
-	return 0;
+	if (t->magic != TD_MAGIC) {
+		fprintf(stderr, "Error: %s: Type descriptor magic number mismatch. Expected 0x%X, got 0x%X.\n",
+				__func__, TD_MAGIC, t->magic);
+		return 0;
+	}
+	return 1;
 }
 // print
 void print_uint(void *data);

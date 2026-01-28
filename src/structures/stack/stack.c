@@ -2,25 +2,28 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <genlib/td.h>
+#include <genlib/stack.h>
 
 #include "stknode/stknode.h"
-#include "../../../include/genlib/stack.h"
 
 /* info: private methods */
 
-static inline int _validate_stack(stack *stk) {
+static inline int _validate_stack_ptr(stack *stk) {
 	if (stk == NULL) {
-		fprintf(stderr, "=== error: _validate_stack(): stack doesn't exist or it has been destroyed ===\n");
+		fprintf(stderr, "Error: %s: Stack pointer is NULL.\n", __func__);
 		return 0;
 	}
 	return 1;
 }
 
 static inline int _validate_stindex(stack *stk, size_t index) {
-	if (!stk || index >= stk->length) {
-		fprintf(stderr,
-	  "=== error: _validate_stindex(): index [%zu] out of bounds <length: %zu> ===\n",
-	  index, stk->length);
+	if (stk == NULL) {
+		fprintf(stderr, "Error: %s: Stack pointer is NULL for index validation.\n", __func__);
+		return 0;
+	}
+	if (index >= stk->length) {
+		fprintf(stderr, "Error: %s: Index %zu out of bounds for stack length %zu.\n", __func__, index, stk->length);
 		return 0;
 	}
 	return 1;
@@ -41,7 +44,7 @@ stack* stack_construct(void) {
 }
 
 void stack_destruct(stack *stk) {
-	if (!_validate_stack(stk))
+	if (!_validate_stack_ptr(stk))
 		return;
 
 	/* destroy all nodes */
@@ -56,10 +59,12 @@ void stack_destruct(stack *stk) {
 } // do stacks even have reverse() method ???
 
 void push(stack *stk, void *data, const td *type) {
-	if (!_validate_stack(stk))
+	if (!_validate_stack_ptr(stk))
 		return;
 
 	stknode *new_node = stknode_construct(data, type);
+	if (!new_node)
+		return;
 
 	/* insert at head */
 	if (stk->length == 0) {
@@ -73,8 +78,12 @@ void push(stack *stk, void *data, const td *type) {
 }
 
 void pop(stack *stk) {
-	if (!_validate_stack(stk) || stk->length == 0)
+	if (!_validate_stack_ptr(stk))
 		return;
+	if (stk->length == 0) {
+		fprintf(stderr, "Error: %s: Attempted to pop from an empty stack.\n", __func__);
+		return;
+	}
 
 	stknode *target = stk->head;
 
@@ -90,15 +99,19 @@ void pop(stack *stk) {
 }
 
 int is_empty(stack *stk) {
-	if (!_validate_stack(stk))
+	if (!_validate_stack_ptr(stk))
 		return 1;
 
 	return stk->length == 0;
 }
 
 void* peek(stack *stk) {
-	if (!_validate_stack(stk) || stk->length == 0)
+	if (!_validate_stack_ptr(stk))
 		return NULL;
+	if (stk->length == 0) {
+		fprintf(stderr, "Error: %s: Attempted to peek from an empty stack.\n", __func__);
+		return NULL;
+	}
 
 	return stk->head->data;
 } /* stack_c */

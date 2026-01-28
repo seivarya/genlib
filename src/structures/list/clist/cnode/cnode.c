@@ -1,18 +1,17 @@
 /* cnode.c: circular linked list node methods */
 
 #include <stdio.h>
-#include <string.h>
-
 #include "cnode.h"
+#include <genlib/td.h>
 
 cnode* cnode_construct(void *data, const td *type) {
 	cnode *node = malloc(sizeof(cnode));
 	if (!node) {
-		perror("=== malloc failed: dnode_construct(): sizeof(dnode) ===");
+		perror("=== malloc failed: cnode_construct(): sizeof(cnode) ===");
 		return NULL;
 	}
 	if (type == NULL || !td_validator(type)) {
-		perror("=== TD_MAGIC failed or type null ===\n");
+			fprintf(stderr, "Fatal Error: %s: Invalid or NULL type descriptor provided. Exiting.\n", __func__);
 		exit(3);
 	}
 	node->type = type;
@@ -31,7 +30,7 @@ void cnode_destruct(cnode *node) {
 	if (!node) return;
 
 	if (node->type && node->type->destruct) {
-		node->type->destruct(node);
+		node->type->destruct(node->data);
 	}
 
 	free(node);

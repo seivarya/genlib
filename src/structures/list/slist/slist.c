@@ -2,24 +2,28 @@
 
 #include <stdlib.h>
 #include <stdio.h>
+#include <genlib/td.h>
+#include <genlib/slist.h>
 
 #include "snode/snode.h" 
-#include "../../../../include/genlib/td.h"
-#include "../../../../include/genlib/slist.h"
 
 /* info: private methods */
 
-static inline int _validate_slist(slist *list) {
+static inline int _validate_slist_ptr(slist *list) {
 	if (list == NULL) {
-		fprintf(stderr, "=== error: _validate_slist(): list doesn't exist or it has been destroyed ===\n");
+		fprintf(stderr, "Error: %s: Singly linked list pointer is NULL.\n", __func__);
 		return 0;
 	}
 	return 1;
 }
 
 static inline int _validate_sindex(slist *list, size_t index) {
-	if (!list || index >= list->length) {
-		fprintf(stderr, "=== error: _validate_sindex(): index [%zu] out of bounds <length: %zu> ===\n", index, list->length);
+	if (list == NULL) {
+		fprintf(stderr, "Error: %s: Singly linked list pointer is NULL for index validation.\n", __func__);
+		return 0;
+	}
+	if (index >= list->length) {
+		fprintf(stderr, "Error: %s: Index %zu out of bounds for list length %zu.\n", __func__, index, list->length);
 		return 0;
 	}
 	return 1;
@@ -50,7 +54,7 @@ slist* slist_construct(void) {
 }
 
 void slist_destruct(slist *list) {
-	if (!_validate_slist(list))
+	if (!_validate_slist_ptr(list))
 		return;
 
 	/* destroy all nodes */
@@ -65,11 +69,13 @@ void slist_destruct(slist *list) {
 }
 
 void slist_insert(slist *list, size_t index, void *data, const td *type) {
-	if (!_validate_slist(list))
+	if (!_validate_slist_ptr(list))
 		return;
 
-	if (index > list->length)
+		if (index > list->length) {
+		fprintf(stderr, "Error: %s: Index %zu is out of bounds (length %zu).\n", __func__, index, list->length);
 		return;
+	}
 
 	snode *new_node = snode_construct(data, type);
 
@@ -117,15 +123,27 @@ void* slist_fetch_node(slist *list, size_t index) {
 		return NULL;
 
 	snode *node = _slist_iterate(list, index);
-	if (!node) { printf("=== node not found ===\n"); }
+	if (!node) { fprintf(stderr, "Error: %s: Node not found at index %zu.\n", __func__, index); }
 	return node;
 }
 
 void slist_print(slist *list) {
+	if (!_validate_slist_ptr(list))
+		return;
+
+	if (list->length == 0) {
+		fprintf(stderr, "Error: %s: Singly linked list is empty, cannot print.\n", __func__);
+		return;
+	}
+
 	snode *current = list->head;
 	while (current != NULL) {
 		const td *type = current->type;
-		type->print(current->data);
+		if (type && type->print) {
+			type->print(current->data);
+		} else {
+			fprintf(stderr, "Warning: %s: No print function available for data type at node %p.\n", __func__, (void*)current);
+		}
 		current = current->next;
 	}
 } /* slist_c */
