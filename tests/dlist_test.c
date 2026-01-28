@@ -4,6 +4,6 @@
 int main(void) {
 	dlist *list = dlist_construct();
 	int var = 32;
-	dlist_insert(list, 0, &var, &TD_INT);
+	dlist_insert(list, 0, &var, NULL);
 	dlist_destruct(list);
 }

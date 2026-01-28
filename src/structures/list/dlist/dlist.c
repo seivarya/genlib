@@ -17,6 +17,13 @@ static inline int _validate_dlist_ptr(dlist *list) {
 	return 1;
 }
 
+static inline void _validate_dnode_construction(dlist *list, dnode *node) {
+	if (!node) {
+		dlist_destruct(list);
+		exit(3);
+	}
+}
+
 static inline int _validate_dindex(dlist *list, size_t index) {
 	if (list == NULL) {
 		fprintf(stderr, "Error: %s: Doubly linked list pointer is NULL for index validation.\n", __func__);
@@ -30,8 +37,7 @@ static inline int _validate_dindex(dlist *list, size_t index) {
 }
 
 static dnode* _dlist_iterate(dlist *list, size_t index) {
-	if (!_validate_dindex(list, index))
-		return NULL;
+	if (!_validate_dindex(list, index)) return NULL;
 
 	size_t mid_index = list->length / 2;
 	dnode *cursor;
@@ -69,8 +75,7 @@ dlist* dlist_construct(void) {
 }
 
 void dlist_destruct(dlist *list) {
-	if (!_validate_dlist_ptr(list))
-		return;
+	if (!_validate_dlist_ptr(list)) return;
 
 	dnode *current = list->head;
 	while (current != NULL) {
@@ -83,17 +88,15 @@ void dlist_destruct(dlist *list) {
 }
 
 void dlist_insert(dlist *list, size_t index, void *data, const td *type) {
-	if (!_validate_dlist_ptr(list))
-		return;
+	if (!_validate_dlist_ptr(list)) return;
 
-		if (index > list->length) {
+	if (index > list->length) {
 		fprintf(stderr, "Error: %s: Index %zu is out of bounds (length %zu).\n", __func__, index, list->length);
 		return;
 	}
 
 	dnode *new_node = dnode_construct(data, type);
-	if (!new_node)
-		return;
+	_validate_dnode_construction(list, new_node);
 
 	/* case 1: insert at head */
 	if (index == 0) {
@@ -128,8 +131,7 @@ void dlist_insert(dlist *list, size_t index, void *data, const td *type) {
 }
 
 void dlist_remove(dlist *list, size_t index) {
-	if (!_validate_dindex(list, index))
-		return;
+	if (!_validate_dindex(list, index)) return;
 
 	dnode *target;
 
@@ -175,8 +177,7 @@ void* dlist_fetch_node(dlist *list, size_t index) {
 }
 
 void dlist_print(dlist *list) {
-	if (!_validate_dlist_ptr(list))
-		return;
+	if (!_validate_dlist_ptr(list)) return;
 
 	if (list->length == 0) {
 		fprintf(stderr, "Error: %s: Doubly linked list is empty, cannot print.\n", __func__);

@@ -17,6 +17,13 @@ static inline int _validate_stack_ptr(stack *stk) {
 	return 1;
 }
 
+static inline void _validate_stknode_construction(stack *stk, stknode *node) {
+	if (!node) {
+		stack_destruct(stk);
+		exit(3);
+	}
+}
+
 static inline int _validate_stindex(stack *stk, size_t index) {
 	if (stk == NULL) {
 		fprintf(stderr, "Error: %s: Stack pointer is NULL for index validation.\n", __func__);
@@ -63,8 +70,7 @@ void push(stack *stk, void *data, const td *type) {
 		return;
 
 	stknode *new_node = stknode_construct(data, type);
-	if (!new_node)
-		return;
+	_validate_stknode_construction(stk, new_node);
 
 	/* insert at head */
 	if (stk->length == 0) {

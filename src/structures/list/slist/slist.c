@@ -17,6 +17,13 @@ static inline int _validate_slist_ptr(slist *list) {
 	return 1;
 }
 
+static inline void _validate_snode_construction(slist *list, snode *node) {
+	if (!node) {
+		slist_destruct(list);
+		exit(3);
+	}
+}
+
 static inline int _validate_sindex(slist *list, size_t index) {
 	if (list == NULL) {
 		fprintf(stderr, "Error: %s: Singly linked list pointer is NULL for index validation.\n", __func__);
@@ -30,8 +37,7 @@ static inline int _validate_sindex(slist *list, size_t index) {
 }
 
 static snode* _slist_iterate(slist *list, size_t index) {
-	if (!_validate_sindex(list, index))
-		return NULL;
+	if (!_validate_sindex(list, index)) return NULL;
 
 	snode *cursor = list->head;
 	for (size_t i = 0; i < index; i++)
@@ -54,8 +60,7 @@ slist* slist_construct(void) {
 }
 
 void slist_destruct(slist *list) {
-	if (!_validate_slist_ptr(list))
-		return;
+	if (!_validate_slist_ptr(list)) return;
 
 	/* destroy all nodes */
 	snode *current = list->head;
@@ -69,15 +74,15 @@ void slist_destruct(slist *list) {
 }
 
 void slist_insert(slist *list, size_t index, void *data, const td *type) {
-	if (!_validate_slist_ptr(list))
-		return;
+	if (!_validate_slist_ptr(list)) return;
 
-		if (index > list->length) {
+	if (index > list->length) {
 		fprintf(stderr, "Error: %s: Index %zu is out of bounds (length %zu).\n", __func__, index, list->length);
 		return;
 	}
 
 	snode *new_node = snode_construct(data, type);
+	_validate_snode_construction(list, new_node);
 
 	/* insert at head */
 	if (index == 0) {
