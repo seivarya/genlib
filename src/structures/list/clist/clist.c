@@ -17,6 +17,13 @@ static inline int _validate_clist_ptr(clist *list) {
 	return 1;
 }
 
+static inline void _validate_cnode_construction(clist *list, cnode *node) {
+	if (!node) {
+		clist_destruct(list);
+		exit(3);
+	}
+}
+
 static inline int _validate_cindex(clist *list, size_t index) {
 	if (list == NULL) {
 		fprintf(stderr, "Error: %s: Circular list pointer is NULL for index validation.\n", __func__);
@@ -90,14 +97,13 @@ void clist_insert(clist *list, size_t index, void *data, const td *type) {
 	if (!_validate_clist_ptr(list))
 		return;
 
-		if (index > list->length) {
+	if (index > list->length) {
 		fprintf(stderr, "Error: %s: Index %zu is out of bounds (length %zu).\n", __func__, index, list->length);
 		return;
 	}
 
 	cnode *new_node = cnode_construct(data, type);
-	if (!new_node)
-		return;
+	_validate_cnode_construction(list, new_node);
 
 	/* case 1: insert at head */
 	if (index == 0) {
@@ -214,4 +220,4 @@ void clist_print(clist *list) {
 		}
 		current = current->next;
 	} while(current != list->head);
-}
+} /* clist_c */

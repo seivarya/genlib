@@ -17,6 +17,13 @@ static inline int _validate_queue_ptr(queue *q) {
 	return 1;
 }
 
+static inline void _validate_qnode_construction(queue *q, qnode *node) {
+	if (!node) {
+		queue_destruct(q);
+		exit(3);
+	}
+}
+
 static inline int _validate_qindex(queue *q, size_t index) {
 	if (q == NULL) {
 		fprintf(stderr, "Error: %s: Queue pointer is NULL for index validation.\n", __func__);
@@ -64,8 +71,7 @@ void enqueue(queue *q, void *data, const td *type) {
 		return;
 
 	qnode *new_node = qnode_construct(data, type);
-	if (!new_node)
-		return;
+	_validate_qnode_construction(q, new_node);
 
 	/* attach node to tail */
 	if (q->length == 0) {

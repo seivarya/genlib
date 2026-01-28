@@ -11,8 +11,9 @@ cnode* cnode_construct(void *data, const td *type) {
 		return NULL;
 	}
 	if (type == NULL || !td_validator(type)) {
-			fprintf(stderr, "Fatal Error: %s: Invalid or NULL type descriptor provided. Exiting.\n", __func__);
-		exit(3);
+		fprintf(stderr, "Fatal Error: %s: Invalid or NULL type descriptor provided. Exiting.\n", __func__);
+		free(node);
+		return NULL;
 	}
 	node->type = type;
 	node->next = NULL;
