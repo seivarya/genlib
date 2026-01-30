@@ -51,9 +51,10 @@ static dnode* _dlist_iterate(dlist *list, size_t index) {
 		}
 	} else {
 		cursor = list->tail;
-		while (index != 0) {
+		size_t steps = list->length - index - 1;
+		while (steps != 0) {
 			cursor = cursor->previous;
-			index--;
+			steps--;
 		}
 	}
 

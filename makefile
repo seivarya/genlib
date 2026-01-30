@@ -52,31 +52,41 @@ QUEUE_SRC = \
 #  Tests
 # ======================
 
-SLIST_TEST = tests/slist_test.c
-DLIST_TEST = tests/dlist_test.c
-CLIST_TEST = tests/clist_test.c
-STACK_TEST = tests/stack_test.c
-QUEUE_TEST = tests/queue_test.c
+SLIST_TEST = tests/sltest.c
+DLIST_TEST = tests/dltest.c
+CLIST_TEST = tests/cltest.c
+STACK_TEST = tests/stktest.c
+QUEUE_TEST = tests/qtest.c
 
 # ======================
 #  Build rules
 # ======================
 
-all: slist_test dlist_test clist_test stack_test queue_test
+MKDIR = mkdir -p
+OUT_DIR = run_tests
 
-slist_test: $(SLIST_SRC) $(TD_SRC) $(SLIST_TEST)
+all: crtdir addfiles
+
+crtdir: $(OUT_DIR)
+
+$(OUT_DIR):
+	$(MKDIR) $(OUT_DIR)
+
+addfiles: $(OUT_DIR)/sltest $(OUT_DIR)/dltest $(OUT_DIR)/cltest $(OUT_DIR)/stktest $(OUT_DIR)/qtest
+
+$(OUT_DIR)/sltest: $(SLIST_SRC) $(TD_SRC) $(SLIST_TEST)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-dlist_test: $(DLIST_SRC) $(TD_SRC) $(DLIST_TEST)
+$(OUT_DIR)/dltest: $(DLIST_SRC) $(TD_SRC) $(DLIST_TEST)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-clist_test: $(CLIST_SRC) $(TD_SRC) $(CLIST_TEST)
+$(OUT_DIR)/cltest: $(CLIST_SRC) $(TD_SRC) $(CLIST_TEST)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-stack_test: $(STACK_SRC) $(TD_SRC) $(STACK_TEST)
+$(OUT_DIR)/stktest: $(STACK_SRC) $(TD_SRC) $(STACK_TEST)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
-queue_test: $(QUEUE_SRC) $(TD_SRC) $(QUEUE_TEST)
+$(OUT_DIR)/qtest: $(QUEUE_SRC) $(TD_SRC) $(QUEUE_TEST)
 	$(CC) $(CFLAGS) $^ -o $@ $(LDFLAGS)
 
 # ======================
@@ -84,7 +94,7 @@ queue_test: $(QUEUE_SRC) $(TD_SRC) $(QUEUE_TEST)
 # ======================
 
 clean:
-	rm -f slist_test dlist_test clist_test stack_test queue_test
+	rm -rf $(OUT_DIR)
 	find . -name '*.o' -delete
 
 .PHONY: all clean
