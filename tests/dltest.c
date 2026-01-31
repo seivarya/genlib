@@ -4,7 +4,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include <genlib/genlib.h>
+#include <rvlib/rvlib.h>
 
 static int failures = 0;
 #define CHECK(cond) do { \

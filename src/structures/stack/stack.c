@@ -2,8 +2,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <genlib/td.h>
-#include <genlib/stack.h>
+#include <rvlib/td.h>
+#include <rvlib/stack.h>
 
 #include "stknode/stknode.h"
 

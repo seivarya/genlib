@@ -2,8 +2,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <genlib/td.h>
-#include <genlib/dlist.h>
+#include <rvlib/td.h>
+#include <rvlib/dlist.h>
 
 #include "dnode/dnode.h" 
 

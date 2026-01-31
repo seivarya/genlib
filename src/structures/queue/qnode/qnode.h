@@ -4,7 +4,7 @@
 #define QNODE_H
 
 #include <stdlib.h>
-#include <genlib/td.h>
+#include <rvlib/td.h>
 
 typedef struct qnode qnode;
 

@@ -1,7 +1,7 @@
 /* stknode.c: stack node methods */
 
 #include <stdio.h>
-#include <genlib/td.h> 
+#include <rvlib/td.h> 
 #include "stknode.h"
 
 stknode* stknode_construct(void *data, const td *type) {

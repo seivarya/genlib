@@ -2,8 +2,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <genlib/td.h>
-#include <genlib/queue.h>
+#include <rvlib/td.h>
+#include <rvlib/queue.h>
 
 #include "qnode/qnode.h"
 

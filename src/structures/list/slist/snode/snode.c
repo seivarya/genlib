@@ -1,7 +1,7 @@
 /* snode.c: singly linked list node methods */
 
 #include <stdio.h>
-#include <genlib/td.h>
+#include <rvlib/td.h>
 #include "snode.h"
 
 snode* snode_construct(void *data, const td *type) {

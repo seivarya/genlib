@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "../../include/genlib/td.h"
+#include "rvlib/td.h"
 
 int td_validator(const td *t) {
 	if (t == NULL) {

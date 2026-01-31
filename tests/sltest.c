@@ -5,7 +5,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <genlib/genlib.h>
+#include <rvlib/rvlib.h>
 
 static int failures = 0;
 

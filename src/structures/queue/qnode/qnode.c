@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include "qnode.h"
-#include <genlib/td.h>
+#include <rvlib/td.h>
 
 qnode* qnode_construct(void *data, const td *type) {
 	qnode *node = malloc(sizeof(qnode));

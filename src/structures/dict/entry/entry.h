@@ -2,7 +2,7 @@
 #define ENTRY_H
 
 #include <stdlib.h>
-#include <genlib/td.h>
+#include <rvlib/td.h>
 
 
 typedef struct entry entry;

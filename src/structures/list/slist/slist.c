@@ -2,8 +2,8 @@
 
 #include <stdlib.h>
 #include <stdio.h>
-#include <genlib/td.h>
-#include <genlib/slist.h>
+#include <rvlib/td.h>
+#include <rvlib/slist.h>
 
 #include "snode/snode.h" 
 

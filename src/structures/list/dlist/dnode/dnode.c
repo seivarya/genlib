@@ -2,7 +2,7 @@
 
 #include <stdio.h>
 #include "dnode.h"
-#include <genlib/td.h>
+#include <rvlib/td.h>
 
 dnode* dnode_construct(void *data, const td *type) {
 	dnode *node = malloc(sizeof(dnode));
