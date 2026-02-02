@@ -1,6 +1,5 @@
-/*
- * stktest.c: thorough tests for stack
- */
+/* stktest.c: thorough tests for stack */
+
 #include <stdio.h>
 #include <stdlib.h>
 

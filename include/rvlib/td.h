@@ -32,4 +32,4 @@ extern const td TD_BOOL;
 extern const td TD_SIZE_T;
 extern const td TD_CHAR;
 
-#endif
+#endif /* td_h */

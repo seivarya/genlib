@@ -1,4 +1,4 @@
-<h2 align="center">genlib</h2>
+<h2 align="center">rvlib</h2>
 
 A general purpose C library containing reusable data structures and utilities.
 

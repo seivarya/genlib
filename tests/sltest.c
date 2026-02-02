@@ -196,6 +196,35 @@ static void test_insert_append_sequence(void) {
 	slist_destruct(list);
 }
 
+struct test_data {
+	int elone;
+	char* eltwo;
+};
+
+static void print_struct(void *data) {
+	struct test_data smth = *(struct test_data *)data;
+	printf("struct.elone -> %d\nstruct.eltwo -> %s\n", smth.elone, smth.eltwo);
+}
+
+static void test_error(void) { // crash
+	slist *list = slist_construct();
+	struct test_data data = {
+		.elone = 32,
+		.eltwo = "random data",
+	};
+
+	td TD_TEST_DATA;
+	TD_TEST_DATA.magic = TD_MAGIC;
+	TD_TEST_DATA.size = sizeof(struct test_data);
+	TD_TEST_DATA.print = print_struct;
+
+
+	slist_insert(list, 0, &data, &TD_TEST_DATA);
+	slist_print(list);
+	printf("success\n");
+	slist_destruct(list);
+}
+
 int main(void) {
 	test_construct_destruct();
 	test_empty_operations();
@@ -211,6 +240,7 @@ int main(void) {
 	test_print_non_empty();
 	test_destruct_null();
 	test_insert_append_sequence();
+	test_error();
 
 	if (failures > 0) {
 		fprintf(stderr, "sltest: %d failure(s)\n", failures);

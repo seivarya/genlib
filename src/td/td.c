@@ -16,7 +16,7 @@ int td_validator(const td *t) {
 	}
 	return 1;
 }
-// print
+
 void print_uint(void *data);
 void print_long(void *data);
 void print_ulong(void *data);
@@ -28,7 +28,6 @@ void print_str(void *data);
 void print_char(void *data);
 void print_int(void *data);
 
-// hash
 size_t hash_int(void *data);
 size_t hash_str(void *data);
 size_t hash_uint(void *data);
@@ -40,7 +39,6 @@ size_t hash_bool(void *data);
 size_t hash_size_t(void *data);
 size_t hash_char(void *data);
 
-// compare
 int compare_int(void *a, void *b);
 int compare_str(void *a, void *b);
 int compare_uint(void *a, void *b);
@@ -52,7 +50,6 @@ int compare_bool(void *a, void *b);
 int compare_size_t(void *a, void *b);
 int compare_char(void *a, void *b);
 
-// destruct
 void destruct_int(void *data);
 void destruct_str(void *data);
 void destruct_uint(void *data);
@@ -63,6 +60,8 @@ void destruct_ushort(void *data);
 void destruct_bool(void *data);
 void destruct_size_t(void *data);
 void destruct_char(void *data);
+
+
 
 void print_uint(void *data) {
 	printf("%u\n", *(unsigned int *)data);
@@ -102,26 +101,9 @@ void print_char(void *data) {
 void print_int(void *data) {
 	printf("%d\n", *(int *)data);
 }
-// size_t (*hash)(void *key); 
-// int (*compare)(void *a, void *b); 
-// void * (*copy)(void *data); 
-// void (*destruct)(void *data); // user's custom destructor for objects
 
 size_t hash_int(void *data) {
 	return (size_t)(*(const int*)data); // test
-}
-
-size_t hash_str(void *data) {
-	// unsigned int hash = 0;
-	char *str = (char *)data;
-	printf("%s\n", str);
-	// char *str = (char *)data;
-	// int c;
-	//
-	// while ((c = *str++)) {
-	// 	hash += c;
-	// }
-	return 3; // test; it's a very verys shit hash function for actual use case
 }
 
 int compare_int(void *a, void *b) {
@@ -150,10 +132,6 @@ void destruct_str(void *data) { // user's custom destructor for objects
 		free(data);
 	}
 }
-
-// int (*compare)(void *a, void *b); 
-// 	void * (*copy)(void *data); 
-// 	void (*destruct)(void *data); // user's custom destructor for objects
 
 const td TD_STR = {
 	.magic = TD_MAGIC,
@@ -242,36 +220,8 @@ const td TD_SIZE_T = {
 	.destruct = NULL
 };
 
-
 const td TD_CHAR = {
 	.magic = TD_MAGIC,
 	.size  = sizeof(char),
 	.print = print_char
-};
-
-// size_t hash_uint(void *data) {
-// }
-// size_t hash_long(void *data) {
-//
-// }
-//
-// size_t hash_ulong(void *data) {
-//
-// }
-//
-// size_t hash_short(void *data) {
-//
-// }
-//
-// size_t hash_ushort(void *data) {
-//
-// }
-//
-// size_t hash_bool(void *data) {
-//
-// }
-//
-// size_t hash_size_t(void *data) {
-//
-// }
-
+}; /* td_c */
